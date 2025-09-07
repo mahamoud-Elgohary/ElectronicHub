@@ -1,23 +1,29 @@
 // Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
 
 // Your Firebase config (replace with your actual values from Firebase Console)
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+     apiKey: "AIzaSyBWW6-aR7jfNOjNEtJORxEsqjjMJ0cOk3w",
+    authDomain: "electronichub-22676.firebaseapp.com",
+    databaseURL:"https://electronichub-22676-default-rtdb.firebaseio.com",
+    projectId: "electronichub-22676",
+    storageBucket: "electronichub-22676.appspot.com",
+    messagingSenderId: "104130323974",
+    appId: "1:104130323974:web:9495c1c28539ad872cc587"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getDatabase(app);
 
-// Handle signup form
-const form = document.getElementById("signup-form");
+export{db,auth};
+
+
+/*const form = document.getElementById("signup-form");
 
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -33,4 +39,4 @@ form.addEventListener("submit", async (e) => {
     } catch (error) {
         alert("❌ Error: " + error.message);
     }
-});
+});*/
