@@ -23,6 +23,7 @@
     "tailwindcss": "^4.1.13"
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
     "browserslist": "^4.25.4",
     "caniuse-lite": "^1.0.30001741",
     "electron-to-chromium": "^1.5.214",
