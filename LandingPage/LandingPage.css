@@ -248,6 +248,12 @@ nav hr {
   font-size: 16px;
 }
 
-
+.Product-landing-page{
+  margin: 20px auto;
+    max-width: 1200px;
+}
+.Product-landing-page h2{
+  padding-left: 10px;
+}
 
 
