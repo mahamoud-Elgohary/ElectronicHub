@@ -76,6 +76,7 @@ async function getProducts() {
         <h4>${product.ProductName}</h4>
         <p>Description:${product.Description}</p>
         <p class="price">$${product.Price}</p>
+        <button class="btn btn-success">Add to cart<button>
         
       `;
 
