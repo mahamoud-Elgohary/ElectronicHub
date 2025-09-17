@@ -1,0 +1,6 @@
+button:hover {
+  border-radius: 9999px;
+}
+* {
+  text-transform: uppercase;
+}

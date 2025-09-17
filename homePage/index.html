@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Electronic Hub – Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              primary: { DEFAULT: '#ff7a00', 700: '#e06d00' },
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+  <body
+    class="font-sans text-black bg-white dark:bg-gray-900 dark:text-white hover:shadow hover:transition-all"
+  >
+    <!-- Navbar -->
+    <header
+      class="top-0 z-40 border-b hover:shadow hover:transition-allsticky bg-white/80 backdrop-blur-md dark:bg-gray-800/80"
+    >
+      <div class="flex items-center justify-between px-4 py-3 mx-auto max-w-7xl">
+        <button
+          id="toggleMenu"
+          class="text-2xl md:hidden"
+          aria-controls="menu"
+          aria-expanded="false"
+        >
+          &#9776;
+        </button>
+        <nav
+          id="menu"
+          class="flex-col hidden gap-4 transition duration-300 transform -translate-y-4 opacity-0 md:translate-y-0 md:opacity-100 md:flex md:flex-row md:gap-6"
+        >
+          <a href="#" class="px-2 py-1 hover:text-primary" aria-current="page">Home</a>
+          <a href="#" class="px-2 py-1 hover:text-primary">About</a>
+          <a href="#" class="px-2 py-1 hover:text-primary">Products</a>
+          <a href="#" class="px-2 py-1 hover:text-primary">Solutions</a>
+          <a href="#" class="px-2 py-1 hover:text-primary">Offers</a>
+          <a href="#" class="px-2 py-1 hover:text-primary">Cart</a>
+        </nav>
+        <div class="flex gap-2">
+          <button
+            class="px-4 py-2 text-white transition-all rounded-full bg-primary hover:bg-primary-700 hover:text-black hover:shadow"
+          >
+            Sign in
+          </button>
+          <button
+            class="px-4 py-2 text-white transition-all rounded-full bg-primary hover:bg-primary-700 hover:text-black hover:shadow"
+          >
+            Sign up
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="max-w-4xl px-4 py-16 mx-auto text-center">
+      <h1 class="mb-6 text-5xl font-bold">Welcome to Electronic Hub</h1>
+      <p class="text-xl text-gray-600 dark:text-gray-300">Everything you need in one place</p>
+
+      <!-- Slider -->
+      <div id="slider" class="relative max-w-3xl mx-auto mt-10 overflow-hidden rounded-lg">
+        <div class="flex items-center justify-center h-48 text-3xl text-white slide bg-primary">
+          Deal 1
+        </div>
+        <div
+          class="flex items-center justify-center hidden h-48 text-3xl text-white slide bg-primary/80"
+        >
+          Deal 2
+        </div>
+        <div
+          class="flex items-center justify-center hidden h-48 text-3xl text-white slide bg-primary/60"
+        >
+          Deal 3
+        </div>
+        <button id="prev" class="absolute text-2xl text-white -translate-y-1/2 left-2 top-1/2">
+          &#10094;
+        </button>
+        <button id="next" class="absolute text-2xl text-white -translate-y-1/2 right-2 top-1/2">
+          &#10095;
+        </button>
+      </div>
+
+      <div class="flex flex-wrap justify-center gap-4 mt-6">
+        <button
+          class="px-6 py-2 transition-all border rounded-full shadow hover:bg-primary hover:text-white hover:shadow"
+        >
+          Learn more
+        </button>
+        <button
+          id="openModal"
+          class="px-6 py-2 text-white transition-all rounded-full bg-primary hover:bg-primary-700 hover:text-black hover:shadow"
+        >
+          Shop now
+        </button>
+      </div>
+    </section>
+
+    <!-- ProductCard template -->
+    <template id="Card">
+      <article
+        class="overflow-hidden transition-all border rounded-md shadow group hover:shadow-lg hover:shadow"
+      >
+        <div
+          class="flex items-center justify-center w-full bg-gray-100 aspect-square hover:shadow hover:transition-all dark:bg-gray-700"
+        >
+          <slot name="icon"></slot>
+        </div>
+        <div class="p-4 hover:shadow hover:transition-all">
+          <h4 class="font-medium truncate"><slot name="title"></slot></h4>
+          <p class="text-sm text-gray-500 hover:shadow hover:transition-all dark:text-gray-400">
+            <slot name="desc"></slot>
+          </p>
+          <span class="inline-block text-lg font-semibold"><slot name="price"></slot></span>
+        </div>
+      </article>
+    </template>
+
+    <!-- Grid -->
+    <main class="px-4 mx-auto max-w-7xl">
+      <section
+        id="productGrid"
+        class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+      ></section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-10 mt-16 text-sm bg-gray-50 dark:bg-gray-800">
+      <div class="grid grid-cols-1 gap-8 px-4 mx-auto max-w-7xl sm:grid-cols-2 md:grid-cols-4">
+        <div>
+          <h3 class="mb-4 text-lg font-bold">Electronic Hub</h3>
+          <p class="text-gray-600 dark:text-gray-400">&copy; 2025 Electronic Hub.</p>
+        </div>
+        <div>
+          <h4 class="font-semibold">Explore</h4>
+          <ul class="mt-2 space-y-2">
+            <li><a href="#" class="hover:text-primary">Design systems</a></li>
+            <li><a href="#" class="hover:text-primary">Prototyping</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold">Resources</h4>
+          <ul class="mt-2 space-y-2">
+            <li><a href="#" class="hover:text-primary">Blog</a></li>
+            <li><a href="#" class="hover:text-primary">Support</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-semibold">Company</h4>
+          <ul class="mt-2 space-y-2">
+            <li><a href="#" class="hover:text-primary">About Us</a></li>
+            <li><a href="#" class="hover:text-primary">Contact</a></li>
+            <li><a href="#" class="hover:text-primary">Careers</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 z-50 items-center justify-center hidden bg-black/50">
+      <div class="p-6 bg-white rounded shadow-lg w-80 dark:bg-gray-800">
+        <button
+          id="closeModal"
+          class="absolute text-xl text-gray-400 right-3 top-3 hover:text-black"
+        >
+          &times;
+        </button>
+        <h3 class="mb-4 text-xl font-semibold">Coming soon</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-300">Checkout flow under construction…</p>
+      </div>
+    </div>
+
+    <!-- External JS -->
+    <script src="app.js"></script>
+  </body>
+</html>
