@@ -1,14 +1,17 @@
 import { db } from "../config.js";
 import{ref, set,get,child}from"https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
 
-function writeUserData(ProductId, ProductName, imageUrl, Price,Cost, Discount ,qty) {
+function writeUserData(ProductId, ProductName, imageUrl, Price,Cost, Discount ,qty,Description
+) {
   set(ref(db, 'Products/' + ProductId), {
     ProductName:ProductName,
     Price:Price,
     Cost:Cost,  
     Discount:Discount,
     qty:qty,
-    imageUrl : imageUrl
+    imageUrl : imageUrl,
+    Description:Description
+
   })
   .then(()=>{alert('success')})
 
@@ -18,8 +21,9 @@ function writeUserData(ProductId, ProductName, imageUrl, Price,Cost, Discount ,q
 });
 }
 
+/********************************************Write data***************************************************************************/
 
-document.getElementById("create-product").addEventListener("submit", (event) => {
+/* document.getElementsByClassName("ShowProduct").addEventListener("submit", (event) => {
   event.preventDefault();
 
   const ProductId = Date.now().toString(); 
@@ -31,7 +35,7 @@ document.getElementById("create-product").addEventListener("submit", (event) => 
   const imageUrl = document.getElementById("img").value;
 
   writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, qty);
-});
+}); */
 /******************************************Read data Function*************************************************************************/
 
 async function getAllProducts() {
@@ -54,7 +58,39 @@ async function getAllProducts() {
 }
 
 
-async function renderTable() {
+async function getProducts() {
+  const products = await getAllProducts();
+  const container = document.getElementsByClassName("ShowProduct")[0];
+  container.innerHTML = "";
+
+ 
+  for (let id in products) {
+    if (products.hasOwnProperty(id)) {
+      const product = products[id];
+
+      const card = document.createElement("div");
+      card.classList.add("ShowProduct-card");
+
+      card.innerHTML = `
+        <img src="${product.imageUrl}">
+        <h4>${product.ProductName}</h4>
+        <p>Description:${product.Description}</p>
+        <p class="price">$${product.Price}</p>
+        
+      `;
+
+      container.appendChild(card);
+    }
+  }
+}
+
+window.addEventListener("load", getProducts);
+
+
+
+
+
+/* async function renderTable() {
   const products = await getAllProducts();
   const tbody = document
     .getElementById("products-table")
@@ -75,4 +111,4 @@ async function renderTable() {
     tbody.appendChild(row);
   });
 }
-document.getElementById("load-products").addEventListener("click", renderTable);
+document.getElementById("load-products").addEventListener("click", renderTable); */

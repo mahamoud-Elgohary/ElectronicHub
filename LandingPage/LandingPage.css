@@ -191,3 +191,63 @@ nav hr {
   font-size: 14px;
   color: #333;
 }
+
+
+
+
+/* Products Page */
+
+.ShowProduct-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+  gap: 25px;
+  margin: 30px;
+}
+.ShowProduct-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  height: 350px;  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ShowProduct-card:hover {
+  transform: translateY(-8px);
+}
+
+
+.ShowProduct-card img {
+  width: 100%;
+  height: 200px;   
+  object-fit: cover; 
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.ShowProduct-card h4 {
+  font-size: 18px;
+  font-weight: bold;
+  color: #0d0724;
+}
+
+.ShowProduct-card p {
+  margin: 3px 0;
+  font-size: 14px;
+  color: #444;
+}
+
+.ShowProduct-card .price {
+  font-weight: bold;
+  color: #e74c3c;
+  font-size: 16px;
+}
+
+
+
+
