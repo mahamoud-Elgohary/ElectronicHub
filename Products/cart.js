@@ -35,6 +35,24 @@ function getAll() {
     totalItems: values.length
   };
 }
+
+function increase(productId){
+if(cart[productId]){
+cart[productId].quantity++
+saveData()
+display()
+}
+}
+
+function decrease(productId){
+  if(cart[productId] && cart[productId].quantity>1){
+    cart[productId].quantity--
+  }else{
+    removeFromCart(productId);
+  }
+   saveData();
+  display();
+}
 function getTotal(){
 const res= Object.values(cart).reduce((sum ,item) =>{
    return sum + item.price * item.quantity
@@ -74,7 +92,9 @@ function display() {
         <img src="https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/Video-Gallery-Surface-Laptop-6-004?wid=1600&hei=900&fit=crop"  alt="${item.name}" />
         <h4>${item.name}</h4>
         <p>Price: $${item.price}</p>
+        <button onclick="increase('${item.id}')">+</button>
         <p>Qty: ${item.quantity}</p>
+        <button onclick="decrease('${item.id}')">-</button>
         <p>Total: $${item.price * item.quantity}</p>
         <button onclick="removeFromCart(${item.id}); display();">Remove</button>
       </div>
@@ -82,5 +102,6 @@ function display() {
     `;
   });
 }
-
+addtocart({ id: 1, name: "Laptop", price: 1000 });
+addtocart({ id: 1, name: "Laptop", price: 1000 });
 display()
