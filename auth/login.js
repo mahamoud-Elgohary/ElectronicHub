@@ -8,7 +8,11 @@ const firebaseConfig = {
     projectId: "electronichub-22676",
     storageBucket: "electronichub-22676.appspot.com",
     messagingSenderId: "104130323974",
-    appId: "1:104130323974:web:9495c1c28539ad872cc587"
+    appId: "1:104130323974:web:9495c1c28539ad872cc587",
+    "hosting": {
+    "public": "public",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+  }
 };
 
 const app = initializeApp(firebaseConfig);
@@ -24,15 +28,25 @@ form.addEventListener("submit", async (e) => {
 
     try {
         const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        alert("✅ Welcome back " + userCredential.user.email);
+  const user = userCredential.user;
+        alert("✅ Welcome back " +user.email);
         form.reset();
         // Redirect to dashboard
-        //window.location.href = "dashboard.html";
-        window.alert("Login Succesfully!!")
+        
+               if (user.email.endsWith("@electronichub.com")) {
+                window.location.href = "/homePage/AdminPanel.html";
+                
+}
+  else {
+  window.location.href = "/LandingPage/LandingPage.html";
+}
+
     } catch (error) {
-        window.alert("❌ Login failed: " + error.message);
+        window.alert("Login failed: " + error.message);
     }
+    
 });
+
 
 
 //   Burger Menu
