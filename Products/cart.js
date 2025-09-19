@@ -102,6 +102,5 @@ function display() {
     `;
   });
 }
-addtocart({ id: 1, name: "Laptop", price: 1000 });
-addtocart({ id: 1, name: "Laptop", price: 1000 });
+
 display()
