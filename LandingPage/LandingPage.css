@@ -291,14 +291,24 @@ nav hr {
   font-size: 16px;
 }
 
-.Product-landing-page {
-  margin: 20px auto;
-  max-width: 1200px;
+/* .card-categories {
+  width: 250px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 8px;
+
 }
 
-.Product-landing-page h2 {
-  padding-left: 10px;
-}
+.card-categories img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 15px;
+  background: #f3f4f6;
+  padding: 10px;
+  margin-bottom: 5px;
+} */
+
 
 
 .features-section {
@@ -424,4 +434,8 @@ nav hr {
   .cart {
     font-size: 14px;
   }
+}
+
+.container {
+  margin: 20px;
 }

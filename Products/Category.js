@@ -1,5 +1,6 @@
 import { db } from "../config.js";
-import{ref, set}from"https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
+
+import{ ref, onValue ,set} from"https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
 
 function CreateCategory(Category_id, Categoryname, Categoryimage) {
     set(ref(db, 'Categories/' + Category_id), {
@@ -34,3 +35,27 @@ document.getElementById("create-Category").addEventListener("submit", (event) =>
 
 createdb()
 */
+function ListenToCategories() {
+  const categoriesRef = ref(db, "Categories");
+
+  onValue(categoriesRef, (snapshot) => {
+    const data = snapshot.val();
+    console.log("Updated Categories:", data);
+
+    const container = document.getElementById("categories-list");
+    container.innerHTML = "";
+  Object.values(data).forEach((category) => {
+  const div = document.createElement("div");
+  div.innerHTML = `
+    <div class="ShowProduct-card">
+      <img src="${category.Categoryimage}" alt="${category.Categoryname}" />
+      <h3>${category.Categoryname}</h3>
+    </div>
+  `;
+  container.appendChild(div);
+});
+  });
+}
+
+
+ListenToCategories();
