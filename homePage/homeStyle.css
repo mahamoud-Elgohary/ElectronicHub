@@ -1,0 +1,151 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+/* Nav Bar Start */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #0d0724;
+  color: white;
+}
+
+.top-nav .nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.top-nav ul {
+  display: flex;
+  margin-top: 1rem;
+  list-style: none;
+  gap: 15px;
+}
+
+.top-nav a {
+  color: white;
+  text-decoration: none;
+}
+
+.menu-toggle {
+  display: none;
+  font-size: 22px;
+  cursor: pointer;
+  color: white;
+}
+
+nav .top-nav {
+  display: flex;
+  /* justify-content: space-between; */
+  background-color: #0d0724;
+}
+
+nav .top-nav .left-side ul {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+}
+
+.top-nav .left-side ul li a {
+  text-decoration: none;
+  margin-right: 10px;
+  color: white;
+}
+
+nav .top-nav .right-side ul {
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+}
+
+.top-nav .right-side ul li a {
+  text-decoration: none;
+  /* margin-right: 10px; */
+  color: white;
+}
+
+.top-nav span {
+  padding: 0 10px;
+  color: gray;
+}
+
+nav hr {
+  border: 0;
+  border-top: 2px solid gray;
+  margin: 0;
+}
+
+/* End Of Nav Bar  */
+
+/* Mid Nav Bar LOGO & SEARCH & CART */
+.mid-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #0d0724;
+  padding: 10px 30px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.logo h4 {
+  font-size: 20px;
+  color: white;
+}
+
+.logo span {
+  color: #a855f7;
+}
+
+.search-bar {
+  flex: 1;
+  margin: 0 40px;
+}
+
+.search-bar form {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 25px;
+  padding: 5px 10px;
+  width: 80%;
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 10px 15px;
+  border-radius: 20px;
+}
+
+.search-bar button {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  margin-left: 5px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.right-mid-nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.hotline span {
+  font-weight: bold;
+}
+
+.cart {
+  font-weight: bold;
+  color: #e74c3c;
+}
