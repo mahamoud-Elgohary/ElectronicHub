@@ -1,6 +1,6 @@
 // Import Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import { getDatabase } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 
@@ -19,6 +19,20 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getDatabase(app);
+
+
+onAuthStateChanged(auth, (user) => {
+  const welcome = document.querySelector("#profile a");
+  if (welcome) {
+    if (user) {
+      const userName = user.email.split("@")[0];    
+      welcome.textContent = `Welcome ${userName}`;
+    } else {
+      welcome.textContent = "Login";
+      welcome.href = "/auth/login.html";
+    }
+  }
+});
 
 export{db,auth};
 

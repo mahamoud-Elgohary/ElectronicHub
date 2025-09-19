@@ -38,7 +38,7 @@ form.addEventListener("submit", async (e) => {
                 
 }
   else {
-  window.location.href = "/LandingPage/LandingPage.html";
+  window.location.href = "/homePage/home.html";
 }
 
     } catch (error) {
