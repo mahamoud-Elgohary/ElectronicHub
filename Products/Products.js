@@ -87,6 +87,28 @@ async function getProducts() {
 
 window.addEventListener("load", getProducts);
 
+/*******************************Searchbar*********************************************************/
+const search=document.querySelector(".search-bar-form input[type='text']");
+const products = document.getElementsByClassName("ShowProduct-card");
+search.addEventListener("input",()=>{
+  const unicase=search.value.toLowerCase();
+ for (let i = 0; i < products.length; i++) {
+    const product = products[i];
+    const name = product.querySelector("h4").textContent.toLowerCase();
+    product.style.display = name.includes(unicase) ? "" : "none";
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -113,3 +135,5 @@ window.addEventListener("load", getProducts);
   });
 }
 document.getElementById("load-products").addEventListener("click", renderTable); */
+
+
