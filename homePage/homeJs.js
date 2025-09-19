@@ -15,3 +15,8 @@ toggleBtn.addEventListener('click', () => {
   leftSide.classList.toggle('active');
   rightSide.classList.toggle('active');
 });
+
+document.getElementById('search-form')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  alert('Searching…');
+});
