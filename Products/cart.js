@@ -6,7 +6,7 @@ function saveData(){
     localStorage.setItem("cart",JSON.stringify(cart))
 }
 
-function addtocart(product){
+export function addtocart(product){
     const exs=cart[product.id]
     console.log(exs)
         if(exs){
@@ -22,7 +22,7 @@ function addtocart(product){
         }
         saveData()
     }
-function getAll() {
+export function getAll() {
   const values = Object.values(cart);
    const totalQty = values.reduce((acc, item) => {
     return acc + item.quantity;
@@ -81,6 +81,7 @@ getTotal()
 
 function display() {
   const container = document.getElementById("container");
+  if (!container) return;
   container.innerHTML = "";
 
   const values = Object.values(cart);
@@ -102,5 +103,8 @@ function display() {
     `;
   });
 }
+document.addEventListener("DOMContentLoaded", () => {
+  display();
+});
 
-display()
+

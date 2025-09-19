@@ -1,5 +1,6 @@
 import { db } from "../config.js";
 import{ref, set,get,child}from"https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
+import { addtocart } from "./cart.js";
 
 function writeUserData(ProductId, ProductName, imageUrl, Price,Cost, Discount ,qty,Description
 ) {
@@ -81,6 +82,17 @@ async function getProducts() {
       `;
 
       container.appendChild(card);
+      card.querySelector("button").addEventListener("click", () => {
+        addtocart({
+          id: id,
+          name: product.ProductName,
+          price: parseFloat(product.Price),
+          quantity: 1,
+        });
+        alert(`${product.ProductName} added to cart`);
+      });
+      
+      
     }
   }
 }
