@@ -5,93 +5,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-            width: 300px;
-        }
-
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .field {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-
-        input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background: #45a049;
-        }
-
-        p {
-            text-align: center;
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-    </style>
+    <!-- Font Awesome icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/auth/login.css">
 </head>
 
 <body>
-    <div class="container">
-        <h2>Login</h2>
-        <form id="login-form">
-            <div class="field">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="field">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Login</button>
-            <p>Don’t have an account? <a href="./signup.html">Sign Up</a></p>
-        </form>
-    </div>
 
+
+    <nav>
+        <!-- Top Nav -->
+        <div class="top-nav">
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <div class="left-side">
+                <ul>
+                    <li><a href="">About Us </a> <span>|</span></li>
+                    <li><a href="">Our Partner </a><span>|</span></li>
+                    <li><a href="/Products/Products.html">Products</a></li>
+                </ul>
+            </div>
+
+            <div class="right-side">
+                <ul>
+                    <li><a href="">Track Your order </a><span>|</span></li>
+                    <li><a href="">Categories </a><span>|</span></li>
+                    <li><a href="">Contact Us </a></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Mid Navbar -->
+        <div class="mid-navbar">
+            <div class="logo">
+                <h4>Ele<span>C</span>tonic HuB</h4>
+            </div>
+
+            <div class="search-bar">
+                <form action="" id="search-form">
+                    <input type="text" placeholder="Search for products">
+                    <button><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+
+            <div class="right-mid-nav">
+                <div class="hotline">
+                    <span>📞 Hotline 24/7</span><br>
+                    <small>(010) 285-5028</small>
+                </div>
+                <div class="cart">
+                    🛒 $0.00 (0 items)
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="form-container">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="field">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit">Login</button>
+
+            </form>
+        </div>
+        <hr class="space-bet">
+        <div class="right-side-container">
+            <h2>LOGIN</h2>
+            <p>Registering for this site allows you to access your order status and history. Just fill in the fields
+                below, and we'll get a new account set up for you in no time. We will only ask you for information
+                necessary to make the purchase process faster and easier.
+            </p>
+            <p>Don't have an account? <a href="./signup.html">Sign Up</a></p>
+        </div>
+    </div>
+    <footer>
+
+    </footer>
     <script type="module" src="./login.js"></script>
 </body>
 
