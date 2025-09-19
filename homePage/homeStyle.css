@@ -163,6 +163,34 @@ footer {
   justify-content:center;
   background-color: #0d0724;
 }
+
+.site-footer{
+  background:#f8f9fb;color:#0d0724}
+.footer-brand{
+  font-weight:700;font-size:1.25rem;color:#0d0724;text-decoration:none}
+.accent{
+  color:#0d0724}
+.title{
+  font-weight:700;margin-bottom:.5rem}
+.f-link{
+  color:#555;text-decoration:none}
+.f-link:hover
+{color:#0d0724}
+
+.newsletter{
+  background:#0d0724;border:1px solid #0d0724}
+.social{
+  width:36px;height:36px;display:grid;place-items:center;
+  border-radius:50%;background:#eef2f6;color:#0d0724;text-decoration:none
+}
+.social:hover{background:#e5e9f0}
+
+.pay i{
+  font-size:1.25rem;background:#fff;border:1px solid #e5e7eb;
+  border-radius:.5rem;padding:.35rem .5rem
+}
+.bottom{
+  border-top:1px solid #0d0724;padding-top:1rem}
 #main-hero{
    text-align:center;
   justify-content:center;
