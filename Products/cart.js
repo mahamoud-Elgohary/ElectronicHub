@@ -2,11 +2,16 @@ import {getAllProducts} from './Products.js'
 
 console.log( await getAllProducts())
 
-let cart= JSON.parse(localStorage.getItem("cart")) || {}
+let cart = JSON.parse(localStorage.getItem("cart")) || {};
 console.log(cart)
-function saveData(){
-    localStorage.setItem("cart",JSON.stringify(cart))
+function loadData() {
+
+  cart = JSON.parse(localStorage.getItem("cart")) || {};
 }
+function saveData() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+}
+
 
 export async function getNamesAndPrices() {
   const products = await getAllProducts();
@@ -59,6 +64,8 @@ export function increase(productId){
 if(cart[productId]){
 cart[productId].quantity++
 saveData()
+    window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "inc", productId } }));
+
 display()
 }
 }
@@ -70,6 +77,8 @@ export function decrease(productId){
     removeFromCart(productId);
   }
    saveData();
+    window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "dec", productId } }));
+
   display();
 }
 function getTotal(){
@@ -85,6 +94,8 @@ function removeFromCart(productId) {
     delete cart[productId];
     saveData();
     console.log(`Removed product ${productId}`);
+        window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "remove", productId } }));
+
      display();
        
   }
@@ -104,7 +115,8 @@ function removeFromCart(productId) {
 getTotal()
 
 export function display() {
-  const container = document.getElementById("container");
+  loadData();
+  const container = document.getElementById("cart-container");
   if (!container) return;
   container.innerHTML = "";
 
@@ -112,18 +124,30 @@ export function display() {
 
   values.forEach(item => {
     container.innerHTML += `
-      <div class="ShowProduct-card">
-        <img src="${item.imageUrl}" alt="${item.name}" />
-        <h4>${item.name}</h4>
-        <p>Price: $${item.price}</p>
-        <p>
-          <button class="btn-inc" data-id="${item.id}">+</button>
-          Qty: ${item.quantity}
-          <button class="btn-dec" data-id="${item.id}">-</button>
-        </p>
-        <p>Total: $${item.price * item.quantity}</p>
-        <button class="btn-remove" data-id="${item.id}">Remove</button>
+
+      <div class="col-md-4 mb-4">
+  <div class="card shadow-sm h-100">
+    <img src="${item.imageUrl}" class="card-img-top" alt="${item.name}" />
+    <div class="card-body d-flex flex-column">
+      <h5 class="card-title">${item.name}</h5>
+      <p class="card-text text-muted mb-1">Price: $${item.price}</p>
+
+      <div class="d-flex align-items-center justify-content-between my-2">
+        <div class="btn-group" role="group">
+          <button class="btn btn-sm btn-outline-primary btn-inc" data-id="${item.id}">+</button>
+          <span class="px-3 fw-bold">${item.quantity}</span>
+          <button class="btn btn-sm btn-outline-warning btn-dec" data-id="${item.id}">-</button>
+        </div>
+        <span class="fw-semibold">Total: $${item.price * item.quantity}</span>
       </div>
+
+      <button class="btn btn-sm btn-danger mt-auto btn-remove" data-id="${item.id}">
+        <i class="bi bi-trash"></i> Remove
+      </button>
+    </div>
+  </div>
+</div>
+
     `;
   });
 
@@ -138,6 +162,20 @@ export function display() {
     btn.addEventListener("click", () => removeFromCart(btn.dataset.id))
   );
 }
+
+
+
+export function updateNavbarCart() {
+  const navCart = document.querySelector(".cart");
+  if (!navCart) return;
+
+  const { totalPrice, totalQty } = getAll();
+  navCart.textContent = `🛒 $${totalPrice.toFixed(2)} (${totalQty} items)`;
+}
+
+document.addEventListener("DOMContentLoaded", updateNavbarCart);
+
+window.addEventListener("cart:updated", updateNavbarCart);
 
 document.addEventListener("DOMContentLoaded", display);
 
