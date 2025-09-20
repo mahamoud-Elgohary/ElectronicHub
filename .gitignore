@@ -1,0 +1,25 @@
+# VS Code Local History
+.history/
+**/.history/**
+
+# IDE/Editor
+.vscode/
+.trunk/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs & cache
+*.log
+.cache/
+
+# Builds
+dist/
+build/
+node_modules/
+
+# Env
+.env
+.env.*
