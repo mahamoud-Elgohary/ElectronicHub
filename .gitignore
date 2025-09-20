@@ -1,16 +1,3 @@
-.history/
-**/.history/**
-.vscode/
-.trunk/
-.idea/
-.DS_Store
-Thumbs.db
-*.log
-.cache/
-dist/
-build/
-node_modules/
-.env
-.env.*
+
 .history/
 **/.history/**
