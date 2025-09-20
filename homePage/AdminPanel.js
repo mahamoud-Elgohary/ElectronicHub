@@ -15,7 +15,7 @@ const prevPageBtn = document.getElementById("prevPage");
 const nextPageBtn = document.getElementById("nextPage");
 
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 let allProducts = [];
 let filtered = [];
 let page = 1;
@@ -47,6 +47,7 @@ function renderTable(list) {
       <td>$${p.Cost ?? 0}</td>
       <td>${p.Discount ?? 0}</td>
       <td>${p.qty ?? 0}</td>
+      <td>${p.Categoryname || "-"}</td>
       <td>
         ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.ProductName || "img"}" style="max-width:80px;max-height:60px">` : "-"}
       </td>
@@ -105,6 +106,7 @@ function fillForm(p) {
   document.getElementById("field_cost").value = p?.Cost ?? "";
   document.getElementById("field_discount").value = p?.Discount ?? "0";
   document.getElementById("field_qty").value = p?.qty ?? "0";
+  document.getElementById("field_Cat").value = p?.Categoryname || "";
   document.getElementById("field_image").value = p?.imageUrl || "";
   document.getElementById("field_desc").value = p?.Description || "";
 }
@@ -128,6 +130,7 @@ function readForm() {
   const Cost = asNumber(document.getElementById("field_cost").value);
   const Discount = asNumber(document.getElementById("field_discount").value);
   const qty = parseInt(document.getElementById("field_qty").value || "0", 10);
+  const Categoryname = document.getElementById("field_Cat").value.trim();
   const imageUrl = document.getElementById("field_image").value.trim();
   const Description = document.getElementById("field_desc").value.trim();
 
@@ -144,7 +147,7 @@ function readForm() {
 
   return {
     id,
-    data: { ProductName, Price, Cost, Discount, qty, imageUrl, Description },
+    data: { ProductName, Price, Cost, Discount, qty,Categoryname, imageUrl, Description },
   };
 }
 
