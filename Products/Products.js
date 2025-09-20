@@ -39,7 +39,7 @@ function writeUserData(ProductId, ProductName, imageUrl, Price,Cost, Discount ,q
 }); */
 /******************************************Read data Function*************************************************************************/
 
-async function getAllProducts() {
+export async function getAllProducts() {
   try {
     const dbRef = ref(db);
     const item = await get(child(dbRef, 'Products'));
@@ -62,6 +62,7 @@ async function getAllProducts() {
 async function getProducts() {
   const products = await getAllProducts();
   const container = document.getElementsByClassName("ShowProduct")[0];
+  if (!container) return;
   container.innerHTML = "";
 
  
@@ -86,10 +87,14 @@ async function getProducts() {
         addtocart({
           id: id,
           name: product.ProductName,
+          imageUrl:product.imageUrl,
           price: parseFloat(product.Price),
           quantity: 1,
         });
-        alert(`${product.ProductName} added to cart`);
+        
+          if (typeof display === "function") {
+
+            display();}
       });
       
       

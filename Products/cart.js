@@ -1,10 +1,25 @@
+import {getAllProducts} from './Products.js'
 
+console.log( await getAllProducts())
 
 let cart= JSON.parse(localStorage.getItem("cart")) || {}
 console.log(cart)
 function saveData(){
     localStorage.setItem("cart",JSON.stringify(cart))
 }
+
+export async function getNamesAndPrices() {
+  const products = await getAllProducts();
+  if (!products) return [];
+
+  return Object.entries(products).map(([id, product]) => ({
+    id,
+    name: product.ProductName,
+    imageUrl:product.imageUrl,
+    price: parseFloat(product.Price)
+  }));
+}
+
 
 export function addtocart(product){
     const exs=cart[product.id]
@@ -16,11 +31,15 @@ export function addtocart(product){
           cart[product.id]={
                 id:product.id,
                 name:product.name,
+                imageUrl:product.imageUrl,
                 price:product.price,
                 quantity:product.quantity? product.quantity :1
             }
         }
         saveData()
+        window.dispatchEvent(new CustomEvent("cart:updated", {
+    detail: { type: "add", productId: product.id }
+  }));
     }
 export function getAll() {
   const values = Object.values(cart);
@@ -36,7 +55,7 @@ export function getAll() {
   };
 }
 
-function increase(productId){
+export function increase(productId){
 if(cart[productId]){
 cart[productId].quantity++
 saveData()
@@ -44,7 +63,7 @@ display()
 }
 }
 
-function decrease(productId){
+export function decrease(productId){
   if(cart[productId] && cart[productId].quantity>1){
     cart[productId].quantity--
   }else{
@@ -66,6 +85,7 @@ function removeFromCart(productId) {
     delete cart[productId];
     saveData();
     console.log(`Removed product ${productId}`);
+     display();
        
   }
  
@@ -74,12 +94,16 @@ function removeFromCart(productId) {
 
 
 
+(async () => {
+  const simpleProducts = await getNamesAndPrices();
+  console.log(simpleProducts);
+})();
 
 
 
 getTotal()
 
-function display() {
+export function display() {
   const container = document.getElementById("container");
   if (!container) return;
   container.innerHTML = "";
@@ -88,23 +112,32 @@ function display() {
 
   values.forEach(item => {
     container.innerHTML += `
-    <div class="ShowProduct-grid">
       <div class="ShowProduct-card">
-        <img src="https://cdn-dynmedia-1.microsoft.com/is/image/microsoftcorp/Video-Gallery-Surface-Laptop-6-004?wid=1600&hei=900&fit=crop"  alt="${item.name}" />
+        <img src="${item.imageUrl}" alt="${item.name}" />
         <h4>${item.name}</h4>
         <p>Price: $${item.price}</p>
-        <button onclick="increase('${item.id}')">+</button>
-        <p>Qty: ${item.quantity}</p>
-        <button onclick="decrease('${item.id}')">-</button>
+        <p>
+          <button class="btn-inc" data-id="${item.id}">+</button>
+          Qty: ${item.quantity}
+          <button class="btn-dec" data-id="${item.id}">-</button>
+        </p>
         <p>Total: $${item.price * item.quantity}</p>
-        <button onclick="removeFromCart(${item.id}); display();">Remove</button>
-      </div>
+        <button class="btn-remove" data-id="${item.id}">Remove</button>
       </div>
     `;
   });
-}
-document.addEventListener("DOMContentLoaded", () => {
-  display();
-});
 
+ 
+  document.querySelectorAll(".btn-inc").forEach(btn =>
+    btn.addEventListener("click", () => increase(btn.dataset.id))
+  );
+  document.querySelectorAll(".btn-dec").forEach(btn =>
+    btn.addEventListener("click", () => decrease(btn.dataset.id))
+  );
+  document.querySelectorAll(".btn-remove").forEach(btn =>
+    btn.addEventListener("click", () => removeFromCart(btn.dataset.id))
+  );
+}
+
+document.addEventListener("DOMContentLoaded", display);
 

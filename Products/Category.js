@@ -57,4 +57,6 @@ function ListenToCategories() {
   });
 }
 
+ListenToCategories();
 export { ListenToCategories };
+

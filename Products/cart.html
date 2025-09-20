@@ -7,7 +7,46 @@
     <title>cart</title>
 </head>
 <body>
+      <nav>
+        <div class="top-nav">
+            <div class="left-side">
+                <ul>
+                    <li><a href="">About Us </a> <span>|</span></li>
+                    <li><a href="">Our Partner </a><span>|</span></li>
+                    <li><a href="">Work with Us</a></li>
+                </ul>
+            </div>
+            <div class="right-side">
+                <ul>
+                    <li><a href="">Track Your order </a><span>|</span></li>
+                    <li><a href="">Contact Us </a></li>
+
+                </ul>
+            </div>
+        </div>
+        <hr>
+        <div class="mid-navbar">
+            <div class="logo">
+                <h4>Ele<span>C</span>tonic HuB <span>.</span> </h4>
+            </div>
+            <div class="search-bar">
+                <form action="" id="search-form" class="search-bar-form">
+                    <input type="text" placeholder="Search for products">
+                    <button>S</button>
+                </form>
+            </div>
+            <div class="right-mid-nav">
+                <div class="hotline">
+                    <span>📞 Hotline 24/7</span><br>
+                    <small>(010) 285-5028</small>
+                </div>
+                <div class="cart">
+                    🛒 $0.00 (0 items)
+                </div>
+            </div>
+        </div>
+    </nav>
     <div id="container"></div>
-    <script type="module" src="./cart.js"></script>
+   <script type="module">import { display } from "./cart.js";display();</script>
 </body>
 </html>
