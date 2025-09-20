@@ -35,7 +35,7 @@ document.getElementById('create-Category').addEventListener('submit', (event) =>
 
 createdb()
 */
-function ListenToCategories() {
+export function ListenToCategories() {
   const categoriesRef = ref(db, 'Categories');
 
   onValue(categoriesRef, (snapshot) => {
@@ -57,4 +57,4 @@ function ListenToCategories() {
   });
 }
 
-export { ListenToCategories };
+ListenToCategories();

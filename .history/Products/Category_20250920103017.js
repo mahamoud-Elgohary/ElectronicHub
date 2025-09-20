@@ -1,6 +1,6 @@
 import { db } from '../config.js';
 
-import { onValue, ref, set } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js';
+import { ref, onValue, set } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js';
 
 function CreateCategory(Category_id, Categoryname, Categoryimage) {
   set(ref(db, 'Categories/' + Category_id), {
@@ -57,4 +57,4 @@ function ListenToCategories() {
   });
 }
 
-export { ListenToCategories };
+ListenToCategories();
