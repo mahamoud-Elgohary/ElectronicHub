@@ -1,0 +1,6 @@
+Put the div where you want to display in html page you want to link
+<div id="nav-bar"></div>
+
+link your script
+<script src="../Navbar/nav.js"></script>
+
