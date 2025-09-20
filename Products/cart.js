@@ -175,7 +175,21 @@ export function updateNavbarCart() {
 
 document.addEventListener("DOMContentLoaded", updateNavbarCart);
 
-window.addEventListener("cart:updated", updateNavbarCart);
 
-document.addEventListener("DOMContentLoaded", display);
+///////////////////////////Stripe integration////////////////////////////////////
+export function checkout() {
+  const { totalPrice, totalQty } = getAll();
 
+  if (totalQty === 0) {
+    alert("Cart is empty!");
+    return;
+  }
+
+  // Fake Stripe test link
+  const stripeBaseUrl = "https://buy.stripe.com/test_28E28q3XjeV230dbWgfMA00";
+
+  // Append mock info as query params
+  const url = `${stripeBaseUrl}?amount=${totalPrice.toFixed(2)}&items=${totalQty}`;
+
+  window.open(url, "_blank"); // open in new tab
+}
