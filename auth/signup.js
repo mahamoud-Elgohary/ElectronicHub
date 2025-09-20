@@ -29,7 +29,7 @@ form.addEventListener("submit", async (e) => {
         // Redirect to dashboard if you want:
         // window.location.href = "dashboard.html";
     } catch (error) {
-        alert("❌ Error: " + error.message);
+        alert(" Error: " + error.message);
     }
 });
 
