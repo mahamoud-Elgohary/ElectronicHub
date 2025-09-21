@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
   showFeaturedProducts();
 });
 
-//  Categories
+//
 async function showCategories5() {
   const box = document.getElementById('home-cats');
   if (!box) return;
@@ -51,7 +51,6 @@ async function showCategories5() {
   }
 }
 
-//  Featured products
 async function showFeaturedProducts() {
   const grid = document.getElementById('productGrid');
   if (!grid) return;

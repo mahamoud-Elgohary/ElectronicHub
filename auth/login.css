@@ -9,7 +9,6 @@ body {
     background: #f5f5f5;
 }
 
-/* Nav Bar Start */
 nav .top-nav {
     display: flex;
     justify-content: space-between;
@@ -57,10 +56,7 @@ nav hr {
     margin: 0;
 }
 
-/* End Of Nav Bar  */
 
-
-/* Mid Nav Bar LOGO & SEARCH & CART */
 .mid-navbar {
     display: flex;
     justify-content: space-between;
@@ -214,7 +210,6 @@ a {
 
 
 
-/* Tablet (≤ 992px) */
 @media (max-width: 992px) {
 
     .colection-content {
@@ -257,8 +252,7 @@ a {
     }
 }
 
-/* ======================================= */
-/* Burger Menu (≤ 768px) */
+
 @media (max-width: 768px) {
 
     .menu-toggle {
@@ -311,12 +305,10 @@ a {
 }
 
 
-/* ======================================= */
-/* Small Mobile (≤ 576px) */
+
 @media (max-width: 576px) {
     .hot-categories {
         grid-template-columns: repeat(2, 1fr);
-        /* 2 items per row */
     }
 
     .hot-categories h3 {
