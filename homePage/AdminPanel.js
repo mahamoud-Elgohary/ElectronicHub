@@ -1,4 +1,4 @@
-// admin-products.js
+
 import { db } from "../config.js";
 import {
   ref, set, get, child, update, remove
