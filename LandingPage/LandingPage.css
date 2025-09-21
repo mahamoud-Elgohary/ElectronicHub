@@ -260,6 +260,9 @@ nav hr {
   font-size: 14px;
   color: #333;
 }
+.hot-categories a{
+  text-decoration: none;
+}
 
 
 
