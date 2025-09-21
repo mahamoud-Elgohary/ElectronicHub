@@ -1,7 +1,6 @@
 import { db } from "../config.js";
 import { ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { addtocart, increase, decrease } from "./cart.js"; // كفاية دول
-
+import { addtocart, increase, decrease } from "./cart.js";
 
 function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, qty, Description) {
   set(ref(db, "Products/" + ProductId), {
@@ -13,9 +12,7 @@ function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, 
     imageUrl,
     Description,
   })
-    .then(() => {
-      alert("success");
-    })
+    .then(() => { alert("success"); })
     .catch((err) => {
       console.error("Firebase error:", err);
       alert("Error: " + err.message);
@@ -27,9 +24,7 @@ export async function getAllProducts() {
     const dbRef = ref(db);
     const item = await get(child(dbRef, "Products"));
     if (item.exists()) {
-      const data = item.val();
-      console.log("Products data:", data);
-      return data;
+      return item.val();
     } else {
       console.log("No products found");
       return null;
@@ -39,7 +34,6 @@ export async function getAllProducts() {
     return null;
   }
 }
-
 
 function getCartTotalFromLS() {
   const cart = JSON.parse(localStorage.getItem("cart") || "{}");
@@ -51,23 +45,36 @@ function getQtyFromLS(id) {
   return cart[id]?.quantity || 0;
 }
 
-
 function updateCartSummaryUI() {
   const el = document.getElementById("cart-total");
   if (el) el.textContent = getCartTotalFromLS().toFixed(2);
 }
 
 async function getProducts() {
+  const params = new URLSearchParams(location.search);
+  const cat = params.get("card"); // اسم التصنيف القادم من URL
+
   const products = await getAllProducts();
   const container = document.getElementsByClassName("ShowProduct")[0];
   if (!container || !products) return;
 
+  const filtered = {};
+  if (cat) {
+    for (const id in products) {
+      if (!products.hasOwnProperty(id)) continue;
+      const p = products[id];
+      if (p?.Categoryname === cat) filtered[id] = p;
+    }
+  } else {
+    Object.assign(filtered, products);
+  }
+
   container.innerHTML = "";
 
-  for (let id in products) {
-    if (!products.hasOwnProperty(id)) continue;
+  for (const id in filtered) {
+    if (!filtered.hasOwnProperty(id)) continue;
 
-    const product = products[id];
+    const product = filtered[id];
     const price = parseFloat(product.Price) || 0;
     const qtyInitial = getQtyFromLS(id);
     const lineInitial = price * qtyInitial;
@@ -93,7 +100,6 @@ async function getProducts() {
 
     container.appendChild(card);
 
-
     const incBtn = card.querySelector(`.btn-inc[data-id="${id}"]`);
     const decBtn = card.querySelector(`.btn-dec[data-id="${id}"]`);
     const qtySpan = card.querySelector(`.qty[data-id="${id}"]`);
@@ -102,14 +108,7 @@ async function getProducts() {
     incBtn.addEventListener("click", () => {
       const current = parseInt(qtySpan.textContent, 10) || 0;
       if (current === 0) {
-       
-        addtocart({
-          id,
-          name: product.ProductName,
-          imageUrl: product.imageUrl,
-          price,
-          quantity: 1,
-        });
+        addtocart({ id, name: product.ProductName, imageUrl: product.imageUrl, price, quantity: 1 });
       } else {
         increase(id);
       }
@@ -124,14 +123,13 @@ async function getProducts() {
       const current = parseInt(qtySpan.textContent, 10) || 0;
       if (current <= 0) return;
 
-      decrease(id); 
+      decrease(id);
       const newQty = current - 1;
       qtySpan.textContent = newQty;
       lineAmount.textContent = (price * newQty).toFixed(2);
       if (newQty === 0) decBtn.setAttribute("disabled", "true");
       updateCartSummaryUI();
     });
-
   }
 
   updateCartSummaryUI();

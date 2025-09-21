@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword,onAuthStateChanged } from "http
 import { getDatabase } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 
-// Your Firebase config (replace with your actual values from Firebase Console)
+// Your Firebase config 
 const firebaseConfig = {
      apiKey: "AIzaSyBWW6-aR7jfNOjNEtJORxEsqjjMJ0cOk3w",
     authDomain: "electronichub-22676.firebaseapp.com",
@@ -47,10 +47,10 @@ form.addEventListener("submit", async (e) => {
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        alert("✅ Account created for: " + userCredential.user.email);
+        alert(" Account created for: " + userCredential.user.email);
         form.reset();
         // You can redirect: window.location.href = "dashboard.html";
     } catch (error) {
-        alert("❌ Error: " + error.message);
+        alert(" Error: " + error.message);
     }
 });*/

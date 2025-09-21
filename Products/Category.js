@@ -43,19 +43,39 @@ function ListenToCategories() {
     console.log('Updated Categories:', data);
 
     const container = document.getElementById('categories-list');
-    container.innerHTML = '';
-    Object.values(data).forEach((category) => {
+    if (!container) return; 
+       container.innerHTML = '';
+
+    if (!data) { 
+      container.innerHTML = '<p class="text-muted">No categories.</p>';
+      return;
+    }
+
+    Object.entries(data).forEach(([id, category]) => {
+      const name = category?.Categoryname || '';
+      const img = category?.Categoryimage || '';
+
+      console.log(img, name);
+
       const div = document.createElement('div');
       div.innerHTML = `
-    <div class="ShowProduct-card">
-      <img src="${category.Categoryimage}" alt="${category.Categoryname}" />
-      <h3>${category.Categoryname}</h3>
-    </div>
-  `;
+        <a href="./Products.html?card=${encodeURIComponent(name)}" class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card h-100 shadow-sm">
+            <div class="ratio ratio-16x9">
+              <img src="${img}" alt="${name}" />
+            </div>
+            <div class="card-body text-center">
+              <h3 class="card-title">${name}</h3>
+            </div>
+          </div>
+        </a>
+      `;
       container.appendChild(div);
     });
   });
 }
+
+
 
 ListenToCategories();
 export { ListenToCategories };
