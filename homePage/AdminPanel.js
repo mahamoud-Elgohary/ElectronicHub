@@ -1,11 +1,18 @@
-
-import { db } from "../config.js";
 import {
-  ref, set, get, child, update, remove
+  db
+} from "../config.js";
+import {
+  ref,
+  set,
+  get,
+  child,
+  update,
+  remove
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const tbody = document.getElementById("productsBody");
-const searchInput = document.getElementById("search-form");
+const searchForm = document.getElementById("search-form");
+const searchInput = document.getElementById("search-input");
 const newProductBtn = document.getElementById("newProductBtn");
 const formEl = document.getElementById("productForm");
 const modalEl = document.getElementById("productModal");
@@ -14,26 +21,33 @@ const pageInfo = document.getElementById("pageInfo");
 const prevPageBtn = document.getElementById("prevPage");
 const nextPageBtn = document.getElementById("nextPage");
 
-
 const PAGE_SIZE = 5;
 let allProducts = [];
 let filtered = [];
 let page = 1;
 
-
 function asNumber(v, fallback = 0) {
   const n = parseFloat(v);
   return Number.isFinite(n) ? n : fallback;
 }
+
 function idNow() {
   return Date.now().toString();
+}
+
+function money(v) {
+  const n = asNumber(v);
+  return `$${n.toFixed(2)}`;
 }
 
 async function fetchAll() {
   const snap = await get(child(ref(db), "Products"));
   if (!snap.exists()) return [];
   const obj = snap.val();
-  return Object.entries(obj).map(([id, p]) => ({ id, ...p }));
+  return Object.entries(obj).map(([id, p]) => ({
+    id,
+    ...p
+  }));
 }
 
 function renderTable(list) {
@@ -43,10 +57,10 @@ function renderTable(list) {
     tr.innerHTML = `
       <td class="text-truncate" title="${p.id}">${p.id.slice(-6)}</td>
       <td>${p.ProductName || "-"}</td>
-      <td>$${p.Price ?? 0}</td>
-      <td>$${p.Cost ?? 0}</td>
-      <td>${p.Discount ?? 0}</td>
-      <td>${p.qty ?? 0}</td>
+      <td>${money(p.Price)}</td>
+      <td>${money(p.Cost)}</td>
+      <td>${asNumber(p.Discount).toFixed(2)}</td>
+      <td>${asNumber(p.qty)}</td>
       <td>${p.Categoryname || "-"}</td>
       <td>
         ${p.imageUrl ? `<img src="${p.imageUrl}" alt="${p.ProductName || "img"}" style="max-width:80px;max-height:60px">` : "-"}
@@ -63,10 +77,13 @@ function renderTable(list) {
 }
 
 function applySearch() {
-  const q = (searchInput.value || "").toLowerCase().trim();
-  filtered = !q
-    ? [...allProducts]
-    : allProducts.filter((p) => (p.ProductName || "").toLowerCase().includes(q));
+  const q = (searchInput?.value || "").toLowerCase().trim();
+  filtered = !q ? [...allProducts] :
+    allProducts.filter((p) => {
+      const name = (p.ProductName || "").toLowerCase();
+      const cat = (p.Categoryname || "").toLowerCase();
+      return name.includes(q) || cat.includes(q);
+    });
   page = 1;
   renderPage();
 }
@@ -86,15 +103,14 @@ async function loadProducts() {
   applySearch();
 }
 
-
 let bsModal;
+
 function showModal(title) {
-  if (!bsModal) {
-    bsModal = new bootstrap.Modal(modalEl);
-  }
+  if (!bsModal) bsModal = new bootstrap.Modal(modalEl);
   modalTitle.textContent = title;
   bsModal.show();
 }
+
 function hideModal() {
   bsModal?.hide();
 }
@@ -106,7 +122,7 @@ function fillForm(p) {
   document.getElementById("field_cost").value = p?.Cost ?? "";
   document.getElementById("field_discount").value = p?.Discount ?? "0";
   document.getElementById("field_qty").value = p?.qty ?? "0";
-  document.getElementById("field_Cat").value = p?.Categoryname || "";
+  document.getElementById("field_cat").value = p?.Categoryname || ""; // موحّد مع HTML
   document.getElementById("field_image").value = p?.imageUrl || "";
   document.getElementById("field_desc").value = p?.Description || "";
 }
@@ -130,10 +146,9 @@ function readForm() {
   const Cost = asNumber(document.getElementById("field_cost").value);
   const Discount = asNumber(document.getElementById("field_discount").value);
   const qty = parseInt(document.getElementById("field_qty").value || "0", 10);
-  const Categoryname = document.getElementById("field_Cat").value.trim();
+  const Categoryname = document.getElementById("field_cat").value.trim();
   const imageUrl = document.getElementById("field_image").value.trim();
   const Description = document.getElementById("field_desc").value.trim();
-
 
   const errors = [];
   if (!ProductName) errors.push("Name is required");
@@ -147,10 +162,18 @@ function readForm() {
 
   return {
     id,
-    data: { ProductName, Price, Cost, Discount, qty,Categoryname, imageUrl, Description },
+    data: {
+      ProductName,
+      Price,
+      Cost,
+      Discount,
+      qty,
+      Categoryname,
+      imageUrl,
+      Description
+    }
   };
 }
-
 
 newProductBtn.addEventListener("click", () => {
   fillForm(null);
@@ -161,14 +184,14 @@ formEl.addEventListener("submit", async (e) => {
   e.preventDefault();
   const res = readForm();
   if (!res) return;
-  const { id, data } = res;
+  const {
+    id,
+    data
+  } = res;
 
   try {
-    if (id) {
-      await updateProduct(id, data);
-    } else {
-      await createProduct(data);
-    }
+    if (id) await updateProduct(id, data);
+    else await createProduct(data);
     hideModal();
     await loadProducts();
   } catch (err) {
@@ -180,13 +203,17 @@ formEl.addEventListener("submit", async (e) => {
 tbody.addEventListener("click", async (e) => {
   const btn = e.target.closest("button[data-action]");
   if (!btn) return;
-  const action = btn.dataset.action;
-  const id = btn.dataset.id;
+
+  const {
+    action,
+    id
+  } = btn.dataset;
 
   if (action === "edit") {
     const p = allProducts.find((x) => x.id === id);
     fillForm(p);
     showModal("Edit Product");
+    return;
   }
 
   if (action === "delete") {
@@ -201,13 +228,20 @@ tbody.addEventListener("click", async (e) => {
   }
 });
 
-searchInput.addEventListener("input", applySearch);
-prevPageBtn.addEventListener("click", () => { page = Math.max(1, page - 1); renderPage(); });
+searchForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  applySearch();
+});
+searchInput?.addEventListener("input", applySearch);
+
+prevPageBtn.addEventListener("click", () => {
+  page = Math.max(1, page - 1);
+  renderPage();
+});
 nextPageBtn.addEventListener("click", () => {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   page = Math.min(totalPages, page + 1);
   renderPage();
 });
-
 
 window.addEventListener("load", loadProducts);
