@@ -17,47 +17,101 @@
 
 <body>
 
-    <div id="nav-bar"></div>
+    <nav>
+        <!-- Top Nav -->
+        <div class="top-nav">
+            <div class="menu-toggle" id="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+
+            <div class="left-side">
+                <ul>
+                    <li><a href="../homePage/home.html">Home </a><span>|</span></li>
+                    <li><a href="../homePage/aboutus">About Us </a><span>|</span></li>
+                    <li><a href="../Products/Products.html">Products</a></li>
+                </ul>
+            </div>
+
+            <div class="right-side">
+                <ul>
+                    <li><a href="">Track Your order </a><span>|</span></li>
+                    <li><a href="../auth/login.html">Login </a> <span>|</span></li>
+                    <li><a href="../auth/signup.html">Sign up </a></li>
+                </ul>
+            </div>
+        </div>
+
+        <hr>
+
+        <!-- Mid Navbar -->
+        <div class="mid-navbar">
+            <div class="logo">
+                <h4>Ele<span>C</span>tonic HuB</h4>
+            </div>
+
+            <div class="search-bar">
+                <form action="" id="search-form" class="search-bar-form">
+                    <input type="text" placeholder="Search for products">
+                    <button><i class="fa fa-search"></i></button>
+                </form>
+            </div>
+
+            <div class="right-mid-nav">
+                <div class="hotline">
+                    <span><i class="fa-solid fa-phone"></i>19990 </span>
+
+                </div>
+                <div class="cart">
+                    <a href="./Products/cart.html">
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
     <div class="colection-content">
         <div class="left-slider">
-            <img src="Images/b2.jpg" alt="Collection">
+            <img src="Images/headphone2.jpg" alt="Collection">
         </div>
 
         <div class="right-colection wp-block">
 
             <div class="special-offer">
                 <h2>Special Offer</h2>
-                <p>Washing Machine - $799</p>
+                <p>Galaxy Fold  30000LE</p>
                 <img src="Images/mplc-slider-slide-1-opt.jpg-1.webp" alt="Offer">
             </div>
 
             <div class="hot-categories">
-                <h3>(Icon) Hot Categories</h3>
+                <h3>
+                    <div class="hot-sale"><i class="fa-solid fa-fire"></i></div>Hot Categories
+                </h3>
 
                 <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Appliances</span>
+                    <img src="Images/Prouduct-img/Phones-150x150.jpg" alt="">
+                    <span>Phones</span>
+                </div>
+                <div class="category">
+                    <img src="Images/Prouduct-img/Laptops-150x150.jpg" alt="">
+                    <span>Laptops</span>
                 </div>
                 <div class="category">
                     <img src="Images/Prouduct-img/Consoles.jpg" alt="">
                     <span>Consoles</span>
                 </div>
                 <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Fridges</span>
-                </div>
-                <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
+                    <img src="Images/Prouduct-img/Games-150x150.jpg" alt="">
                     <span>Games</span>
                 </div>
                 <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Laptops</span>
+                    <img src="Images/Prouduct-img/Gaming-150x150.jpg" alt="">
+                    <span>Accessoris</span>
                 </div>
                 <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Phones</span>
+                    <img src="Images/Prouduct-img/apple-ipad-mini-pink-1.jpg" alt="">
+                    <span>Mobile Accessoris</span>
                 </div>
             </div>
 
@@ -214,7 +268,7 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script type="module" src="/Products/Products.js"></script>
     <script src="LandingPage.js"></script>
-    <script src="/Navbar/nav.js"></script>
+    <script src="../Navbar/nav.js"></script>
 </body>
 
 </html>

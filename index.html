@@ -16,6 +16,7 @@
 </head>
 
 <body>
+    <!-- Nav bar Start -->
     <nav>
         <!-- Top Nav -->
         <div class="top-nav">
@@ -25,8 +26,8 @@
 
             <div class="left-side">
                 <ul>
-                    <li><a href="./auth/login.html">Login </a> <span>|</span></li>
-                    <li><a href="./auth/signup.html">Sign up </a><span>|</span></li>
+                    <li><a href="./homePage/home.html">Home </a><span>|</span></li>
+                    <li><a href="./homePage/aboutus">About Us </a><span>|</span></li>
                     <li><a href="./Products/Products.html">Products</a></li>
                 </ul>
             </div>
@@ -34,8 +35,8 @@
             <div class="right-side">
                 <ul>
                     <li><a href="">Track Your order </a><span>|</span></li>
-                    <li><a href="./homePage/home.html">Home </a><span>|</span></li>
-                    <li><a href="./LandingPage/LandingPage.html">Landing page </a></li>
+                    <li><a href="./auth/login.html">Login </a> <span>|</span></li>
+                    <li><a href="./auth/signup.html">Sign up </a></li>
                 </ul>
             </div>
         </div>
@@ -57,19 +58,24 @@
 
             <div class="right-mid-nav">
                 <div class="hotline">
-                    <span>📞 Hotline 24/7</span><br>
-                    <small>(010) 285-5028</small>
+                    <span><i class="fa-solid fa-phone"></i>19990 </span>
+
                 </div>
                 <div class="cart">
-                    🛒 $0.00 (0 items)
+                    <a href="./Products/cart.html">
+                        <i class="fa-solid fa-cart-shopping"></i>
+
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
+ <!-- Navbar End -->
 
+ <!-- Banner S -->
     <div class="colection-content">
         <div class="left-slider">
-            <img src="LandingPage/Images/b2.jpg" alt="Collection">
+            <img src="LandingPage/Images/headphone2.jpg" alt="Collection">
         </div>
 
         <div class="right-colection wp-block">
@@ -81,36 +87,54 @@
             </div>
 
             <div class="hot-categories">
-                <h3>(Icon) Hot Categories</h3>
+                <h3>
+                    <div class="hot-sale"><i class="fa-solid fa-fire"></i></div>Hot Categories
+                </h3>
 
-                <div class="category">
-                    <img src="LandingPage/Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Appliances</span>
-                </div>
-                <div class="category">
-                    <img src="LandingPage/Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Consoles</span>
-                </div>
-                <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Fridges</span>
-                </div>
-                <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Games</span>
-                </div>
-                <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Laptops</span>
-                </div>
-                <div class="category">
-                    <img src="Images/Prouduct-img/Consoles.jpg" alt="">
-                    <span>Phones</span>
-                </div>
+                <a href="">
+                    <div class="category">
+                        <img src="LandingPage/Images/Prouduct-img/Phones-150x150.jpg" alt="">
+                        <span>Phones</span>
+                    </div>
+                </a>
+                <a href="">
+                    <div class="category">
+                        <img src="LandingPage/Images/Prouduct-img/Laptops-150x150.jpg" alt="">
+                        <span>Laptops</span>
+                    </div>
+                </a>
+                <a href="">
+                    <div class="category">
+                        <img src="LandingPage/Images/Prouduct-img/Consoles.jpg" alt="">
+                        <span>Consoles</span>
+                    </div>
+                </a>
+                <a href="">
+                    <div class="category">
+                        <img src="LandingPage/Images/Prouduct-img/Games-150x150.jpg" alt="">
+                        <span>Games</span>
+                    </div>
+                </a>
+
+
+
+                <a href="">
+                    <div class="category">
+                        <img src="LandingPage/Images/Prouduct-img/Gaming-150x150.jpg" alt="">
+                        <span>Accessoris</span>
+                    </div>
+                </a>
+                <a href="">
+                    <div class="category">
+                        <img src="LandingPage/Images/Prouduct-img/apple-ipad-mini-pink-1.jpg" alt="">
+                        <span>Mobile Accessoris</span>
+                    </div>
+                </a>
             </div>
 
         </div>
     </div>
+    <!-- Banner E -->
 
 
     <div class="Product-landing-page">
@@ -184,11 +208,83 @@
         </div>
     </div>
 
+    <a href="LandingPage/LandingPage.html">Test L</a>
+
+    <footer class="site-footer mt-5">
+        <div class="py-4">
+            <!-- Brand + Social -->
+            <div
+                class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 pb-3 border-bottom">
+                <a href="#" class="footer-brand align-content-center">ElectronicHub<span class="accent">.</span></a>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="small text-muted">Social</span>
+                    <a class="social" aria-label="Facebook" href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a class="social" aria-label="X" href="#"><i class="fa-brands fa-x-twitter"></i></a>
+                    <a class="social" aria-label="Instagram" href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a class="social" aria-label="YouTube" href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <!-- Links + Newsletter -->
+            <div class="row g-4 py-4">
+                <div class="col-6 col-md-3">
+                    <h6 class="title">Get to Know Us</h6>
+                    <ul class="list-unstyled small m-0">
+                        <li><a class="f-link" href="#">About Us</a></li>
+                        <li><a class="f-link" href="#">FAQs</a></li>
+                        <li><a class="f-link" href="#">Our Partners</a></li>
+                        <li><a class="f-link" href="#">Work With Us</a></li>
+                        <li><a class="f-link" href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <h6 class="title">Shop</h6>
+                    <ul class="list-unstyled small m-0">
+                        <li><a class="f-link" href="#">Recently Viewed</a></li>
+                        <li><a class="f-link" href="#">Featured Products</a></li>
+                        <li><a class="f-link" href="#">Top 100 Appliances</a></li>
+                        <li><a class="f-link" href="#">Laptops</a></li>
+                        <li><a class="f-link" href="#">Toys & Games</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-6 col-md-3">
+                    <h6 class="title">Useful Links</h6>
+                    <ul class="list-unstyled small m-0">
+                        <li><a class="f-link" href="#">Track Order</a></li>
+                        <li><a class="f-link" href="#">Latest News</a></li>
+                        <li><a class="f-link" href="#">Returns & Refunds</a></li>
+                        <li><a class="f-link" href="#">Support</a></li>
+                    </ul>
+                </div>
+
+
+
+                <!-- Payments + Bottom -->
+                <div
+                    class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 pt-3">
+                    <div class="text-muted small"><i class="fa-solid fa-lock me-1"></i>Safety Payments</div>
+                    <div class="d-flex flex-wrap gap-2 pay">
+                        <i class="fa-brands fa-cc-mastercard"></i>
+                        <i class="fa-brands fa-cc-visa"></i>
+                        <i class="fa-brands fa-cc-paypal"></i>
+                        <i class="fa-brands fa-cc-amex"></i>
+                        <i class="fa-brands fa-cc-stripe"></i>
+                        <i class="fa-brands fa-apple-pay"></i>
+                    </div>
+                </div>
+
+                <p class="bottom text-center text-muted small mt-4 mb-0">
+                    © 2025 ElectronicHub. All rights reserved.
+                </p>
+            </div>
+    </footer>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script type="module" src="/Products/Products.js"></script>
+    <script type="module" src="Products/Products.js"></script>
     <script src="./LandingPage/LandingPage.js"></script>
 </body>
 
