@@ -1,6 +1,6 @@
-import {getAllProducts} from './Products.js'
+import { getAllProducts } from './Products.js'
 
-console.log( await getAllProducts())
+console.log(await getAllProducts())
 
 let cart = JSON.parse(localStorage.getItem("cart")) || {};
 console.log(cart)
@@ -20,35 +20,35 @@ export async function getNamesAndPrices() {
   return Object.entries(products).map(([id, product]) => ({
     id,
     name: product.ProductName,
-    imageUrl:product.imageUrl,
+    imageUrl: product.imageUrl,
     price: parseFloat(product.Price)
   }));
 }
 
 
-export function addtocart(product){
-    const exs=cart[product.id]
-    console.log(exs)
-        if(exs){
-            exs.quantity +=product.quantity || 1;
+export function addtocart(product) {
+  const exs = cart[product.id]
+  console.log(exs)
+  if (exs) {
+    exs.quantity += product.quantity || 1;
 
-        }else{
-          cart[product.id]={
-                id:product.id,
-                name:product.name,
-                imageUrl:product.imageUrl,
-                price:product.price,
-                quantity:product.quantity? product.quantity :1
-            }
-        }
-        saveData()
-        window.dispatchEvent(new CustomEvent("cart:updated", {
+  } else {
+    cart[product.id] = {
+      id: product.id,
+      name: product.name,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      quantity: product.quantity ? product.quantity : 1
+    }
+  }
+  saveData()
+  window.dispatchEvent(new CustomEvent("cart:updated", {
     detail: { type: "add", productId: product.id }
   }));
-    }
+}
 export function getAll() {
   const values = Object.values(cart);
-   const totalQty = values.reduce((acc, item) => {
+  const totalQty = values.reduce((acc, item) => {
     return acc + item.quantity;
   }, 0);
   const totalPrice = getTotal();
@@ -60,33 +60,33 @@ export function getAll() {
   };
 }
 
-export function increase(productId){
-if(cart[productId]){
-cart[productId].quantity++
-saveData()
+export function increase(productId) {
+  if (cart[productId]) {
+    cart[productId].quantity++
+    saveData()
     window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "inc", productId } }));
 
-display()
-}
+    display()
+  }
 }
 
-export function decrease(productId){
-  if(cart[productId] && cart[productId].quantity>1){
+export function decrease(productId) {
+  if (cart[productId] && cart[productId].quantity > 1) {
     cart[productId].quantity--
-  }else{
+  } else {
     removeFromCart(productId);
   }
-   saveData();
-    window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "dec", productId } }));
+  saveData();
+  window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "dec", productId } }));
 
   display();
 }
-function getTotal(){
-const res= Object.values(cart).reduce((sum ,item) =>{
-   return sum + item.price * item.quantity
-},0)
-console.log(res)
-return res
+function getTotal() {
+  const res = Object.values(cart).reduce((sum, item) => {
+    return sum + item.price * item.quantity
+  }, 0)
+  console.log(res)
+  return res
 }
 
 function removeFromCart(productId) {
@@ -94,13 +94,13 @@ function removeFromCart(productId) {
     delete cart[productId];
     saveData();
     console.log(`Removed product ${productId}`);
-        window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "remove", productId } }));
+    window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "remove", productId } }));
 
-     display();
-       
+    display();
+
   }
- 
-   return cart
+
+  return cart
 }
 
 
@@ -126,7 +126,7 @@ export function display() {
     container.innerHTML += `
 
       <div class="col-md-4 mb-4">
-  <div class="card shadow-sm h-100">
+  <div class="card shadow-sm h-100 card-control">
     <img src="${item.imageUrl}" class="card-img-top" alt="${item.name}" />
     <div class="card-body d-flex flex-column">
       <h5 class="card-title">${item.name}</h5>
@@ -151,7 +151,7 @@ export function display() {
     `;
   });
 
- 
+
   document.querySelectorAll(".btn-inc").forEach(btn =>
     btn.addEventListener("click", () => increase(btn.dataset.id))
   );
@@ -170,7 +170,7 @@ export function updateNavbarCart() {
   if (!navCart) return;
 
   const { totalPrice, totalQty } = getAll();
-  navCart.textContent = `🛒 $${totalPrice.toFixed(2)} (${totalQty} items)`;
+  navCart.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> $${totalPrice.toFixed(2)} (${totalQty} items)`;
 }
 
 document.addEventListener("DOMContentLoaded", updateNavbarCart);
