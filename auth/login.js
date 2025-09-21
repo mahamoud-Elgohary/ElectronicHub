@@ -6,7 +6,6 @@ import {
   signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-// Same Firebase config as signup.js
 const firebaseConfig = {
   apiKey: "AIzaSyBWW6-aR7jfNOjNEtJORxEsqjjMJ0cOk3w",
   authDomain: "electronichub-22676.firebaseapp.com",
@@ -34,9 +33,8 @@ form.addEventListener("submit", async (e) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    alert("✅ Welcome back " + user.email);
+    alert(" Welcome back " + user.email);
     form.reset();
-    // Redirect to dashboard
 
     if (user.email.endsWith("@electronichub.com")) {
       window.location.href = "/homePage/AdminPanel.html";
@@ -53,7 +51,6 @@ form.addEventListener("submit", async (e) => {
 
 
 
-//   Burger Menu
 const toggleBtn = document.getElementById("menu-toggle");
 const leftSide = document.querySelector(".left-side");
 const rightSide = document.querySelector(".right-side");

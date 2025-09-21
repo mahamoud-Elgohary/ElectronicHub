@@ -1,7 +1,13 @@
-// admin-products.js
-import { db } from "../config.js";
 import {
-  ref, set, get, child, update, remove
+  db
+} from "../config.js";
+import {
+  ref,
+  set,
+  get,
+  child,
+  update,
+  remove
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const tbody = document.getElementById("productsBody");
@@ -25,6 +31,7 @@ function asNumber(v, fallback = 0) {
   const n = parseFloat(v);
   return Number.isFinite(n) ? n : fallback;
 }
+
 function idNow() {
   return Date.now().toString();
 }
@@ -33,7 +40,10 @@ async function fetchAll() {
   const snap = await get(child(ref(db), "Products"));
   if (!snap.exists()) return [];
   const obj = snap.val();
-  return Object.entries(obj).map(([id, p]) => ({ id, ...p }));
+  return Object.entries(obj).map(([id, p]) => ({
+    id,
+    ...p
+  }));
 }
 
 function renderTable(list) {
@@ -63,9 +73,9 @@ function renderTable(list) {
 
 function applySearch() {
   const q = (searchInput.value || "").toLowerCase().trim();
-  filtered = !q
-    ? [...allProducts]
-    : allProducts.filter((p) => (p.ProductName || "").toLowerCase().includes(q));
+  filtered = !q ?
+    [...allProducts] :
+    allProducts.filter((p) => (p.ProductName || "").toLowerCase().includes(q));
   page = 1;
   renderPage();
 }
@@ -87,6 +97,7 @@ async function loadProducts() {
 
 
 let bsModal;
+
 function showModal(title) {
   if (!bsModal) {
     bsModal = new bootstrap.Modal(modalEl);
@@ -94,6 +105,7 @@ function showModal(title) {
   modalTitle.textContent = title;
   bsModal.show();
 }
+
 function hideModal() {
   bsModal?.hide();
 }
@@ -144,7 +156,15 @@ function readForm() {
 
   return {
     id,
-    data: { ProductName, Price, Cost, Discount, qty, imageUrl, Description },
+    data: {
+      ProductName,
+      Price,
+      Cost,
+      Discount,
+      qty,
+      imageUrl,
+      Description
+    },
   };
 }
 
@@ -158,7 +178,10 @@ formEl.addEventListener("submit", async (e) => {
   e.preventDefault();
   const res = readForm();
   if (!res) return;
-  const { id, data } = res;
+  const {
+    id,
+    data
+  } = res;
 
   try {
     if (id) {
@@ -199,7 +222,10 @@ tbody.addEventListener("click", async (e) => {
 });
 
 searchInput.addEventListener("input", applySearch);
-prevPageBtn.addEventListener("click", () => { page = Math.max(1, page - 1); renderPage(); });
+prevPageBtn.addEventListener("click", () => {
+  page = Math.max(1, page - 1);
+  renderPage();
+});
 nextPageBtn.addEventListener("click", () => {
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   page = Math.min(totalPages, page + 1);
