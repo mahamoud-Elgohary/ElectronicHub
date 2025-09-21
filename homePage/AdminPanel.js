@@ -5,7 +5,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const tbody = document.getElementById("productsBody");
-const searchInput = document.getElementById("searchInput");
+const searchInput = document.getElementById("search-form");
 const newProductBtn = document.getElementById("newProductBtn");
 const formEl = document.getElementById("productForm");
 const modalEl = document.getElementById("productModal");
