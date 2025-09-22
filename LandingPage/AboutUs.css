@@ -1,0 +1,25 @@
+.about h2 {
+  font-weight: bold;
+}
+
+.stat-box {
+  background: #fff;
+  border: 1px solid #eee;
+}
+
+.stat-box h4 {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.about img {
+  object-fit: cover;
+  width: 100%;
+}
+
+.text-muted span{
+    font-weight: bold;
+}
+.Our-Approach span{
+    font-weight: bold;
+}

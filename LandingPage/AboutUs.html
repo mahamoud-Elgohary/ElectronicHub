@@ -4,19 +4,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>About Us</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- Font Awesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="signup.css">
-     <link rel="stylesheet" href="/LandingPage/LandingPage.css">
-
+    <link rel="stylesheet" href="LandingPage.css">
+    <link rel="stylesheet" href="AboutUs.css">
 </head>
 
 <body>
-
+    <!-- Navbar Start  -->
     <nav>
+        <!-- Top Nav -->
         <div class="top-nav">
             <div class="menu-toggle" id="menu-toggle">
                 <i class="fa-solid fa-bars"></i>
@@ -25,7 +25,7 @@
             <div class="left-side">
                 <ul>
                     <li><a href="../homePage/home.html">Home </a><span>|</span></li>
-                    <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
+                    <li><a href="./AboutUs.html">About Us </a><span>|</span></li>
                     <li><a href="../Products/Products.html">Products</a></li>
                 </ul>
             </div>
@@ -33,21 +33,22 @@
             <div class="right-side">
                 <ul>
                     <li><a href="">Track Your order </a><span>|</span></li>
-                    <li><a href="./login.html">Login </a> <span>|</span></li>
-                    <li><a href="./signup.html">Sign up </a></li>
+                    <li><a href="../auth/login.html">Login </a> <span>|</span></li>
+                    <li><a href="../auth/signup.html">Sign up </a></li>
                 </ul>
             </div>
         </div>
 
         <hr>
 
+        <!-- Mid Navbar -->
         <div class="mid-navbar">
             <div class="logo">
                 <h4>Ele<span>C</span>tonic HuB</h4>
             </div>
 
             <div class="search-bar">
-                <form action="" id="search-form">
+                <form action="" id="search-form" class="search-bar-form">
                     <input type="text" placeholder="Search for products">
                     <button><i class="fa fa-search"></i></button>
                 </form>
@@ -55,52 +56,105 @@
 
             <div class="right-mid-nav">
                 <div class="hotline">
-                    <span><i class="fa-solid fa-phone"> </i> 19990 </span>
+                    <span><i class="fa-solid fa-phone"></i>19990 </span>
 
                 </div>
                 <div class="cart">
-                    <a href="/Products/cart.html">
+                    <a href="../Products/cart.html">
                         <i class="fa-solid fa-cart-shopping"></i>
-                       
+
                     </a>
                 </div>
             </div>
         </div>
     </nav>
+    <!-- Navbar End  -->
 
-    <div class="container-l">
-        <div class="form-container">
-            <h2>Sign Up</h2>
-            <form id="signup-form">
-                <div class="field">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="field">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="field">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <button type="submit">Create Account</button>
-                <p>Already have an account? <a href="login.html">Login</a></p>
-            </form>
+    <section class="about container my-5">
+        <div class="text-center mb-4">
+            <h2>EleCtonic HuB Marketplace</h2>
+            <p class="text-muted">
+                We are <span>EleCtonic HuB</span>, a website specialized in smart electronics such as
+                mobiles, smartphones, consoles, and games
+                We started our journey 5 years ago with a clear vision and strong passion to become more professional
+                and trusted in the tech industry.
         </div>
-        <hr class="space-bet">
-        <div class="right-side-container">
-            <h2>Regester</h2>
-            <p>Registering for this site allows you to access your order status and history. Just fill in the fields
-                below, and we'll get a new account set up for you in no time. We will only ask you for information
-                necessary to make the purchase process faster and easier.
-            </p>
-            <p>Don't have an account? <a href="./login.html">Login</a></p>
+
+        <div class="row text-center mb-5">
+            <div class="col-md-3 col-6">
+                <div class="stat-box p-3 shadow-sm rounded">
+                    <h4 class="text-danger">5+ Years</h4>
+                    <p class="mb-0">experience in tech</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box p-3 shadow-sm rounded">
+                    <h4 class="text-danger">1000+</h4>
+                    <p class="mb-0">Happy customers</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box p-3 shadow-sm rounded">
+                    <h4 class="text-danger">50+</h4>
+                    <p class="mb-0">trusted partners</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stat-box p-3 shadow-sm rounded">
+                    <h4 class="text-danger">100%</h4>
+                    <p class="mb-0">dedicated team</p>
+                </div>
+            </div>
         </div>
-    </div>
 
+        <p class="text-muted mb-5">
+            At EleCtonic HuB, our passion is technology and innovation. We work hard to deliver the latest smart
+            devices,
+            ensuring every customer finds exactly what they are looking for with ease and confidence.
+            From smartphones to gaming consoles, our mission is to provide quality products, excellent service,
+            and a seamless shopping experience.
+            <br><br>
+            Our vision is to grow into a leading platform for smart electronics, making technology accessible,
+            enjoyable, and reliable for everyone.
+        </p>
 
-    <!-- Footer -->
+        <div class="row mb-5 g-3">
+            <div class="col-md-4 col-12">
+                <img src="Images/about-us-img/about-us-gallery-1.jpg.webp" class="img-fluid rounded shadow"
+                    alt="warehouse">
+            </div>
+            <div class="col-md-4 col-6">
+                <img src="Images/about-us-img/about-us-gallery-2.jpg.webp" class="img-fluid rounded shadow"
+                    alt="warehouse">
+            </div>
+            <div class="col-md-4 col-6">
+                <img src="Images/about-us-img/about-us-gallery-3.jpg.webp" class="img-fluid rounded shadow"
+                    alt="warehouse">
+            </div>
+
+        </div>
+
+        <div class="Our-Approach  row align-items-center">
+            <div class="col-md-6">
+                <h3>Our Approach</h3>
+                <p><span>Select</span><br>
+                    We help our customers select the right devices from a wide variety of electronics,
+                    with clear comparisons and expert advice to make informed decisions.</p>
+                <p><span>Access</span><br>
+                    We ensure our products are affordable and accessible, giving everyone the chance to enjoy smart
+                    technology
+                    without compromises.</p>
+                <p><span>Enjoy</span><br>
+                    We aim to make technology fun and rewarding. From mobile devices to gaming experiences,
+                    EleCtonic HuB is here to make your tech journey enjoyable and valuable.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="Images/headphone2.jpg" class="img-fluid rounded shadow" alt="customers">
+            </div>
+        </div>
+    </section>
+
+     <!-- Footer Start -->
     <footer class="site-footer mt-5">
         <div class="py-4">
             <!-- Brand + Social -->
@@ -171,7 +225,7 @@
                 </p>
             </div>
     </footer>
-    <script type="module" src="signup.js"></script>
+     <!-- Footer End -->
 
 </body>
 
