@@ -173,7 +173,7 @@ export function updateNavbarCart() {
   navCart.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> $${totalPrice.toFixed(2)} (${totalQty} items)`;
 }
 
-document.addEventListener("DOMContentLoaded", updateNavbarCart);
+document.addEventListener("DOMContentLoaded", updateNavbarCart());
 
 
 ///////////////////////////Stripe integration////////////////////////////////////
@@ -193,3 +193,6 @@ export function checkout() {
 
   window.open(url, "_blank"); // open in new tab
 }
+window.addEventListener("cart:updated", () => {
+  updateNavbarCart();
+});

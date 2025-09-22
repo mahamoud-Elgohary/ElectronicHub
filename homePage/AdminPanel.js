@@ -1,14 +1,5 @@
-import {
-  db
-} from "../config.js";
-import {
-  ref,
-  set,
-  get,
-  child,
-  update,
-  remove
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import {db} from "../config.js";
+import {ref,set,get,child,update,remove} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const tbody = document.getElementById("productsBody");
 const searchForm = document.getElementById("search-form");
@@ -116,15 +107,29 @@ function hideModal() {
 }
 
 function fillForm(p) {
-  document.getElementById("field_id").value = p?.id || "";
-  document.getElementById("field_name").value = p?.ProductName || "";
-  document.getElementById("field_price").value = p?.Price ?? "";
-  document.getElementById("field_cost").value = p?.Cost ?? "";
-  document.getElementById("field_discount").value = p?.Discount ?? "0";
-  document.getElementById("field_qty").value = p?.qty ?? "0";
-  document.getElementById("field_cat").value = p?.Categoryname || ""; // موحّد مع HTML
-  document.getElementById("field_image").value = p?.imageUrl || "";
-  document.getElementById("field_desc").value = p?.Description || "";
+  if (!p) {   
+    document.getElementById("field_id").value = "";
+    document.getElementById("field_name").value = "";
+    document.getElementById("field_price").value = "";
+    document.getElementById("field_cost").value = "";
+    document.getElementById("field_discount").value = "";
+    document.getElementById("field_qty").value = "";
+    document.getElementById("field_cat").value = "";
+    document.getElementById("field_image").value = "";
+    document.getElementById("field_desc").value = "";
+    return;
+  }
+
+  document.getElementById("field_id").value = p.id;
+  document.getElementById("field_name").value = p.ProductName;
+  document.getElementById("field_price").value = p.Price;
+  document.getElementById("field_cost").value = p.Cost;
+  document.getElementById("field_discount").value = p.Discount;
+  document.getElementById("field_qty").value = p.qty;
+  document.getElementById("field_cat").value = p.Categoryname;
+  document.getElementById("field_image").value = p.imageUrl;
+  document.getElementById("field_desc").value = p.Description;
+
 }
 
 async function createProduct(data) {
@@ -212,6 +217,7 @@ tbody.addEventListener("click", async (e) => {
   if (action === "edit") {
     const p = allProducts.find((x) => x.id === id);
     fillForm(p);
+    
     showModal("Edit Product");
     return;
   }

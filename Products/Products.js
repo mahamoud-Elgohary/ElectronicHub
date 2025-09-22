@@ -3,17 +3,19 @@ import { ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/
 import { addtocart, increase, decrease } from "./cart.js";
 
 function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, qty, Description) {
-  set(ref(db, "Products/" + ProductId), {
-    ProductName,
-    Price,
-    Cost,
-    Discount,
-    qty,
-    imageUrl,
-    Description,
+  set(ref(db, 'Products/' + ProductId), {
+    ProductName: ProductName,
+    Price: Price,
+    Cost: Cost,
+    Discount: Discount,
+    qty: qty,
+    imageUrl: imageUrl,
+    Description: Description
   })
-    .then(() => { alert("success"); })
-    .catch((err) => {
+    .then(() => {
+      alert('success');
+    })
+    .catch(err => {
       console.error("Firebase error:", err);
       alert("Error: " + err.message);
     });
@@ -35,6 +37,23 @@ export async function getAllProducts() {
   }
 }
 
+/********************************************Write data***************************************************************************/
+
+/* document.getElementsByClassName("ShowProduct").addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const ProductId = Date.now().toString(); 
+  const ProductName = document.getElementById("PN").value;
+  const Price = document.getElementById("Price").value;
+  const Discount = document.getElementById("Dis").value;
+  const Cost = document.getElementById("cost").value;
+  const qty = document.getElementById("qty").value;
+  const imageUrl = document.getElementById("img").value;
+
+  writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, qty);
+}); */
+/******************************************Read data Function*************************************************************************/
+
 function getCartTotalFromLS() {
   const cart = JSON.parse(localStorage.getItem("cart") || "{}");
   return Object.values(cart).reduce((sum, it) => sum + it.price * it.quantity, 0);
@@ -51,103 +70,100 @@ function updateCartSummaryUI() {
 }
 
 async function getProducts() {
-  const params = new URLSearchParams(location.search);
-  const cat = params.get("card"); // اسم التصنيف القادم من URL
-
   const products = await getAllProducts();
   const container = document.getElementsByClassName("ShowProduct")[0];
-  if (!container || !products) return;
-
-  const filtered = {};
-  if (cat) {
-    for (const id in products) {
-      if (!products.hasOwnProperty(id)) continue;
-      const p = products[id];
-      if (p?.Categoryname === cat) filtered[id] = p;
-    }
-  } else {
-    Object.assign(filtered, products);
-  }
-
+  if (!container) return;
   container.innerHTML = "";
 
-  for (const id in filtered) {
-    if (!filtered.hasOwnProperty(id)) continue;
+  for (let id in products) {
+    if (products.hasOwnProperty(id)) {
+      const product = products[id];
 
-    const product = filtered[id];
-    const price = parseFloat(product.Price) || 0;
-    const qtyInitial = getQtyFromLS(id);
-    const lineInitial = price * qtyInitial;
+      const card = document.createElement("div");
+      card.classList.add("ShowProduct-card");
 
-    const card = document.createElement("div");
-    card.classList.add("ShowProduct-card");
-    card.dataset.id = id;
+      card.innerHTML = `
+        <img src="${product.imageUrl}">
+        <h4>${product.ProductName}</h4>
+        <p>Description:${product.Description}</p>
+        <p class="price">$${product.Price}</p>
+        <button class="btn btn-success">Add to cart</button>
+      `;
 
-    card.innerHTML = `
-      <img src="${product.imageUrl}" alt="${product.ProductName}">
-      <h4>${product.ProductName}</h4>
-      <p>Description: ${product.Description || ""}</p>
-      <p class="price">Price: $${price.toFixed(2)}</p>
+      container.appendChild(card);
 
-      <div class="qty-controls" data-id="${id}" aria-label="quantity controls">
-        <button class="btn-dec btn btn-warning" data-id="${id}" ${qtyInitial === 0 ? "disabled" : ""}>-</button>
-        <span class="qty" data-id="${id}" aria-live="polite">${qtyInitial}</span>
-        <button class="btn-inc btn btn-primary" data-id="${id}">+</button>
-      </div>
+      card.querySelector("button").addEventListener("click", () => {
+        addtocart({
+          id: id,
+          name: product.ProductName,
+          imageUrl: product.imageUrl,
+          price: parseFloat(product.Price),
+          quantity: 1,
+        });
 
-      <p class="line-total">Total for this item: $<span class="line-amount" data-id="${id}">${lineInitial.toFixed(2)}</span></p>
-    `;
-
-    container.appendChild(card);
-
-    const incBtn = card.querySelector(`.btn-inc[data-id="${id}"]`);
-    const decBtn = card.querySelector(`.btn-dec[data-id="${id}"]`);
-    const qtySpan = card.querySelector(`.qty[data-id="${id}"]`);
-    const lineAmount = card.querySelector(`.line-amount[data-id="${id}"]`);
-
-    incBtn.addEventListener("click", () => {
-      const current = parseInt(qtySpan.textContent, 10) || 0;
-      if (current === 0) {
-        addtocart({ id, name: product.ProductName, imageUrl: product.imageUrl, price, quantity: 1 });
-      } else {
-        increase(id);
-      }
-      const newQty = current + 1;
-      qtySpan.textContent = newQty;
-      decBtn.removeAttribute("disabled");
-      lineAmount.textContent = (price * newQty).toFixed(2);
-      updateCartSummaryUI();
-    });
-
-    decBtn.addEventListener("click", () => {
-      const current = parseInt(qtySpan.textContent, 10) || 0;
-      if (current <= 0) return;
-
-      decrease(id);
-      const newQty = current - 1;
-      qtySpan.textContent = newQty;
-      lineAmount.textContent = (price * newQty).toFixed(2);
-      if (newQty === 0) decBtn.setAttribute("disabled", "true");
-      updateCartSummaryUI();
-    });
+        if (typeof display === "function") {
+          display();
+        }
+      });
+    }
   }
-
-  updateCartSummaryUI();
 }
 
-window.addEventListener("load", getProducts);
-
+/*******************************Searchbar*********************************************************/
 const search = document.querySelector(".search-bar-form input[type='text']");
-const cardsLive = () => document.getElementsByClassName("ShowProduct-card");
-
+const cards = document.getElementsByClassName("ShowProduct-card");
 if (search) {
   search.addEventListener("input", () => {
-    const q = search.value.toLowerCase();
-    const list = cardsLive();
-    for (let i = 0; i < list.length; i++) {
-      const card = list[i];
-      const name = card.querySelector("h4")?.textContent.toLowerCase() || "";
-      card.style.display = name.includes(q) ? "" : "none";
+    const unicase = search.value.toLowerCase();
+    for (let i = 0; i < cards.length; i++) {
+      const product = cards[i];
+      const name = product.querySelector("h4").textContent.toLowerCase();
+      product.style.display = name.includes(unicase) ? "" : "none";
     }
   });
 }
+
+/* الكتلة التالية كانت موجودة — تم الإبقاء عليها كما هي مع إغلاق الأقواس فقط،
+   لكنها لن تعمل لأن المتغيرات غير معرّفة في هذا النطاق (مذكور بالأسفل).
+{
+  const handler = () => {
+    const current = parseInt(qtySpan.textContent, 10) || 0;
+    if (current <= 0) return;
+
+    decrease(id);
+    const q = getQtyFromLS(id);
+    qtySpan.textContent = q;
+    lineAmount.textContent = (price * q).toFixed(2);
+    if (q === 0) decBtn.setAttribute("disabled", "true");
+    updateCartSummaryUI();
+  };
+
+  if (typeof decBtn !== "undefined" && decBtn && typeof handler === "function") {
+    decBtn.addEventListener("click", handler);
+  }
+}
+*/
+
+window.addEventListener("load", getProducts);
+
+/* async function renderTable() {
+  const products = await getAllProducts();
+  const tbody = document
+    .getElementById("products-table")
+    .getElementsByTagName("tbody")[0];
+
+  tbody.innerHTML = "";
+  Object.entries(products).forEach(([id, product]) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${id}</td>
+      <td>${product.ProductName}</td>
+      <td>${product.Price}</td>
+      <td>${product.Cost}</td>
+      <td>${product.Discount}</td>
+      <td>${product.qty}</td>
+      <td><img src="${product.imageUrl}" width="50" height="50" alt="${product.ProductName}"></td>`;
+    tbody.appendChild(row);
+  });
+} */
