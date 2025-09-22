@@ -153,6 +153,9 @@ btn2.addEventListener("click", () => {
           price: parseFloat(product.Price),
           quantity: 1,
         });
+        });
+      card.querySelector(".btn2").addEventListener("click", () => {
+        decrease(id);
 
           updateCartSummaryUI(); 
 
