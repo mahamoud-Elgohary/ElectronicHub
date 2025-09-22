@@ -54,23 +54,54 @@ export async function getAllProducts() {
 }); */
 /******************************************Read data Function*************************************************************************/
 
+function getCategoryNameFromURL() {
+  const p = new URLSearchParams(location.search);
+  const name= p.get("card") || ""; 
+  console.log(name)
+  return name
+}
+getCategoryNameFromURL()
 function getCartTotalFromLS() {
   const cart = JSON.parse(localStorage.getItem("cart") || "{}");
   return Object.values(cart).reduce((sum, it) => sum + it.price * it.quantity, 0);
 }
 
-function getQtyFromLS(id) {
-  const cart = JSON.parse(localStorage.getItem("cart") || "{}");
-  return cart[id]?.quantity || 0;
-}
+// function getQtyFromLS(id) {
+//   const cart = JSON.parse(localStorage.getItem("cart") || "{}");
+//   return cart[id]?.quantity || 0;
+// }
 
 function updateCartSummaryUI() {
   const el = document.getElementById("cart-total");
   if (el) el.textContent = getCartTotalFromLS().toFixed(2);
 }
 
+function filterProductsObject(allProducts) {
+if (!allProducts) {
+    console.log("something is wrong");
+    return {};
+  }
+ const wantedCategory = getCategoryNameFromURL();
+
+  if (!wantedCategory) {
+    return allProducts;
+  }
+
+  const result = {};
+  for (let productId in allProducts) {
+    const product = allProducts[productId];
+
+    if (product && product.Categoryname === wantedCategory) {
+      result[productId] = product;
+    }
+  }
+
+  return result;
+
+}
 async function getProducts() {
-  const products = await getAllProducts();
+  const all = await getAllProducts();
+  const  products = filterProductsObject(all);
   const container = document.getElementsByClassName("ShowProduct")[0];
   if (!container) return;
   container.innerHTML = "";
@@ -122,17 +153,13 @@ btn2.addEventListener("click", () => {
           price: parseFloat(product.Price),
           quantity: 1,
         });
-        
 
-      
-      });
-      card.querySelector(".btn2").addEventListener("click", () => {
-        decrease(id);
-        
+          updateCartSummaryUI(); 
 
-      
+        if (typeof display === "function") {
+          display();
+        }
       });
-      
     }
   }
 }
@@ -154,8 +181,7 @@ if (search) {
   });
 }
 
-/* الكتلة التالية كانت موجودة — تم الإبقاء عليها كما هي مع إغلاق الأقواس فقط،
-   لكنها لن تعمل لأن المتغيرات غير معرّفة في هذا النطاق (مذكور بالأسفل).
+/*  
 {
   const handler = () => {
     const current = parseInt(qtySpan.textContent, 10) || 0;
@@ -198,3 +224,6 @@ window.addEventListener("load", getProducts);
     tbody.appendChild(row);
   });
 } */
+
+
+

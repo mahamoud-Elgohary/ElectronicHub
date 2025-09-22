@@ -17,9 +17,12 @@ let allProducts = [];
 let filtered = [];
 let page = 1;
 
-function asNumber(v, fallback = 0) {
-  const n = parseFloat(v);
-  return Number.isFinite(n) ? n : fallback;
+function asNumber(num) {
+  const n = Number(num);   
+  if (isNaN(n)) {
+    return 0;     
+  }
+  return n;              
 }
 
 function idNow() {

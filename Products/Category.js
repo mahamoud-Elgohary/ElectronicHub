@@ -2,27 +2,27 @@ import { db } from '../config.js';
 
 import { onValue, ref, set } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js';
 
-function CreateCategory(Category_id, Categoryname, Categoryimage) {
-  set(ref(db, 'Categories/' + Category_id), {
-    Categoryname: Categoryname,
-    Categoryimage: Categoryimage,
-  })
-    .then(() => {
-      console.log('Category created successfully!');
-    })
-    .catch((error) => {
-      console.error('Error creating category:', error);
-    });
-}
-document.getElementById('create-Category').addEventListener('submit', (event) => {
-  event.preventDefault();
+// function CreateCategory(Category_id, Categoryname, Categoryimage) {
+//   set(ref(db, 'Categories/' + Category_id), {
+//     Categoryname: Categoryname,
+//     Categoryimage: Categoryimage,
+//   })
+//     .then(() => {
+//       console.log('Category created successfully!');
+//     })
+//     .catch((error) => {
+//       console.error('Error creating category:', error);
+//     });
+// }
+// document.getElementById('create-Category').addEventListener('submit', (event) => {
+//   event.preventDefault();
 
-  const Category_id = Date.now().toString();
-  const Categoryname = document.getElementById('CN').value;
-  const Categoryimage = document.getElementById('img').value;
+//   const Category_id = Date.now().toString();
+//   const Categoryname = document.getElementById('CN').value;
+//   const Categoryimage = document.getElementById('img').value;
 
-  CreateCategory(Category_id, Categoryname, Categoryimage);
-});
+//   CreateCategory(Category_id, Categoryname, Categoryimage);
+// });
 
 /*function createdb(){
         Category_id="123456"
@@ -51,9 +51,9 @@ function ListenToCategories() {
       return;
     }
 
-    Object.entries(data).forEach(([id, category]) => {
-      const name = category?.Categoryname || '';
-      const img = category?.Categoryimage || '';
+    Object.values(data).forEach((Category)=> {
+      const name = Category.Categoryname ;
+      const img = Category.Categoryimage ;
 
       console.log(img, name);
 
