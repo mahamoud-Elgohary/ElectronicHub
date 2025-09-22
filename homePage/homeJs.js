@@ -101,3 +101,14 @@ function alertBox(text, type) {
   el.innerHTML = `<div class="alert alert-${type} m-0">${text}</div>`;
   return el;
 }
+
+
+//   Burger Menu
+ const toggleBtn = document.getElementById("menu-toggle");
+  const leftSide = document.querySelector(".left-side");
+  const rightSide = document.querySelector(".right-side");
+
+  toggleBtn.addEventListener("click", () => {
+    leftSide.classList.toggle("active");
+    rightSide.classList.toggle("active");
+  });

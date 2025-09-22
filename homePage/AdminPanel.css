@@ -142,7 +142,6 @@ nav hr {
     display: flex;
     gap: 20px;
     align-items: center;
-    a855f7
 }
 
 .hotline span {
@@ -238,11 +237,7 @@ footer {
     justify-content: center;
 }
 
-* {
-    margin: 0;
-    padding: 0;
-    font-size: 16px;
-}
+
 
 .top-nav {
     display: flex;
