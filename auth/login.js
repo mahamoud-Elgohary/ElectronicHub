@@ -3,7 +3,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
   getAuth,
-  signInWithEmailAndPassword
+  signInWithEmailAndPassword,  GoogleAuthProvider,  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -21,8 +21,30 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
 const form = document.getElementById("login-form");
+
+// Google login button
+const googleBtn = document.getElementById("google-login");
+
+googleBtn.addEventListener("click", async () => {
+  try {
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+
+    alert("Welcome " + user.displayName);
+
+    // redirect same as email login
+    if (user.email.endsWith("@electronichub.com")) {
+      window.location.href = "/homePage/AdminPanel.html";
+    } else {
+      window.location.href = "/homePage/home.html";
+    }
+  } catch (error) {
+    alert("Google login failed: " + error.message);
+  }
+});
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
