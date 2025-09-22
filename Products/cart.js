@@ -167,10 +167,9 @@ export function display() {
 
 export function updateNavbarCart() {
   const navCart = document.querySelector(".cart");
-  if (!navCart) return;
 
   const { totalPrice, totalQty } = getAll();
-  navCart.innerHTML = `<i class="fa-solid fa-cart-shopping"></i> $${totalPrice.toFixed(2)} (${totalQty} items)`;
+  navCart.innerHTML = `<a href="./cart.html"><i class="fa-solid fa-cart-shopping"></i><a> $${totalPrice.toFixed(2)}`;
 }
 
 document.addEventListener("DOMContentLoaded", updateNavbarCart());

@@ -329,6 +329,16 @@ nav hr {
   color: #e74c3c;
   font-size: 16px;
 }
+.ShowProduct-card .btns{
+  display: flex;
+
+    gap: 50px;
+}
+.ShowProduct-card .btns .btn {
+  width: 1000px;
+  text-align: center;
+}
+
 
 /* .card-categories {
   width: 250px;

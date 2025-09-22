@@ -87,12 +87,34 @@ async function getProducts() {
         <h4>${product.ProductName}</h4>
         <p>Description:${product.Description}</p>
         <p class="price">$${product.Price}</p>
-        <button class="btn btn-success">Add to cart</button>
+        <div class="btns">
+        <button class="btn btn-success btn1">+</button>
+            <span class="qty"></span>
+        <button class="btn btn-danger btn2">-</button>
+        </div>
+
       `;
+const btn1 = card.querySelector(".btn1");
+const btn2 = card.querySelector(".btn2");
+const qty = card.querySelector(".qty");
+
+let quantity = 0;
+
+btn1.addEventListener("click", () => {
+  quantity++;
+  qty.textContent = quantity;
+});
+
+btn2.addEventListener("click", () => {
+  if (quantity > 0) {   
+    quantity--;
+    qty.textContent = quantity;
+  }
+});
 
       container.appendChild(card);
 
-      card.querySelector("button").addEventListener("click", () => {
+      card.querySelector(".btn1").addEventListener("click", () => {
         addtocart({
           id: id,
           name: product.ProductName,
@@ -100,14 +122,23 @@ async function getProducts() {
           price: parseFloat(product.Price),
           quantity: 1,
         });
+        
 
-        if (typeof display === "function") {
-          display();
-        }
+      
       });
+      card.querySelector(".btn2").addEventListener("click", () => {
+        decrease(id);
+        
+
+      
+      });
+      
     }
   }
 }
+
+
+
 
 /*******************************Searchbar*********************************************************/
 const search = document.querySelector(".search-bar-form input[type='text']");
