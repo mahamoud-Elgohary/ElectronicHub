@@ -1,23 +1,4 @@
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import {
-    getAuth,
-    createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-
-const firebaseConfig = {
-    apiKey: "AIzaSyBWW6-aR7jfNOjNEtJORxEsqjjMJ0cOk3w",
-    authDomain: "electronichub-22676.firebaseapp.com",
-    projectId: "electronichub-22676",
-    storageBucket: "electronichub-22676.appspot.com",
-    messagingSenderId: "104130323974",
-    appId: "1:104130323974:web:9495c1c28539ad872cc587"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-
+import {auth,createUserWithEmailAndPassword} from "../config.js"
 const form = document.getElementById("signup-form");
 
 form.addEventListener("submit", async (e) => {

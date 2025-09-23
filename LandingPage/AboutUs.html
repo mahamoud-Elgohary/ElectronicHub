@@ -14,62 +14,60 @@
 </head>
 
 <body>
-    <!-- Navbar Start  -->
-    <nav>
-        <!-- Top Nav -->
-        <div class="top-nav">
-            <div class="menu-toggle" id="menu-toggle">
-                <i class="fa-solid fa-bars"></i>
-            </div>
+  <nav>
+    <div class="top-nav">
+      <div class="menu-toggle" id="menu-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </div>
 
-            <div class="left-side">
-                <ul>
-                    <li><a href="../homePage/home.html">Home </a><span>|</span></li>
-                    <li><a href="./AboutUs.html">About Us </a><span>|</span></li>
-                    <li><a href="../Products/Products.html">Products</a></li>
-                </ul>
-            </div>
+      <div class="left-side">
+        <ul>
+          <li id="profile"><a href="./UserProfile.html"> </a> <span></span></li>
+          <li><a href="../homePage/home.html">Home </a><span>|</span></li>
+          <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
+          <li><a href="../Products/Products.html">Products</a></li>
 
-            <div class="right-side">
-                <ul>
-                    <li><a href="./Support.html">Support </a><span>|</span></li>
-                    <li><a href="../auth/login.html">Login </a> <span>|</span></li>
-                    <li><a href="../auth/signup.html">Sign up </a></li>
-                </ul>
-            </div>
+        </ul>
+
+      </div>
+
+      <div class="right-side">
+        <ul>
+          <li><a href="../LandingPage/Support.html">Support </a><span>|</span></li>
+          <li><a href="../auth/login.html">Login </a> <span>|</span></li>
+          <li><a href="../auth/signup.html">Sign up </a></li>
+        </ul>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="mid-navbar">
+      <div class="logo">
+        <h4>Ele<span>C</span>tonic HuB</h4>
+      </div>
+
+      <div class="search-bar">
+        <form action="" id="search-form">
+          <input type="text" placeholder="Search for products">
+          <button><i class="fa fa-search"></i></button>
+        </form>
+      </div>
+
+      <div class="right-mid-nav">
+        <div class="hotline">
+          <span><i class="fa-solid fa-phone"> </i> 19990 </span>
+
         </div>
+        <div class="cart">
+          <a href="../Products/cart.html">
+            <i class="fa-solid fa-cart-shopping"></i>
 
-        <hr>
-
-        <!-- Mid Navbar -->
-        <div class="mid-navbar">
-            <div class="logo">
-                <h4>Ele<span>C</span>tonic HuB</h4>
-            </div>
-
-            <div class="search-bar">
-                <form action="" id="search-form" class="search-bar-form">
-                    <input type="text" placeholder="Search for products">
-                    <button><i class="fa fa-search"></i></button>
-                </form>
-            </div>
-
-            <div class="right-mid-nav">
-                <div class="hotline">
-                    <span><i class="fa-solid fa-phone"></i>19990 </span>
-
-                </div>
-                <div class="cart">
-                    <a href="../Products/cart.html">
-                        <i class="fa-solid fa-cart-shopping"></i>
-
-                    </a>
-                </div>
-            </div>
+          </a>
         </div>
-    </nav>
-    <!-- Navbar End  -->
-
+      </div>
+    </div>
+  </nav>
     <section class="about container my-5">
         <div class="text-center mb-4">
             <h2>EleCtonic HuB Marketplace</h2>
@@ -226,7 +224,8 @@
             </div>
     </footer>
     <!-- Footer End -->
-
+     
+<script src="../config.js" type="module"></script>
 </body>
 
 </html>

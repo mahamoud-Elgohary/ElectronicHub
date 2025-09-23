@@ -4,11 +4,16 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
   getAuth,
-  onAuthStateChanged
+  onAuthStateChanged,
+   GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
   getDatabase
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
 
 
 // Your Firebase config
@@ -29,21 +34,97 @@ const db = getDatabase(app);
 
 
 onAuthStateChanged(auth, (user) => {
-  const welcome = document.querySelector("#profile a");
-  if (welcome) {
-    if (user) {
-      const userName = user.email.split("@")[0];
-      welcome.textContent = `Welcome ${userName}`;
-    } else {
-      welcome.textContent = "Login";
-      welcome.href = "/auth/login.html";
+  const profileA = document.querySelector("#profile a");
+  const leftUl = document.querySelector(".left-side ul");
+  const rightUl = document.querySelector(".right-side ul");
+
+  const attachSignout = () => {
+    const signoutBtns = document.querySelectorAll("#signout-btn-left, #signout-btn-right");
+    signoutBtns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await signOut(auth);
+          sessionStorage.removeItem("userId");
+          window.location.href = "/homePage/home.html";
+        } catch (err) {
+          console.error("Sign out error:", err);
+          alert("Logout failed: " + err.message);
+        }
+      });
+    });
+  };
+
+  const setLoggedInUI = (u) => {
+    const name = u && u.email ? u.email.split("@")[0] : "User";
+
+    if (profileA) {
+      profileA.textContent = `Welcome ${name}`;
+      profileA.href = "./UserProfile.html"; 
     }
+
+    if (leftUl) {
+      leftUl.innerHTML = `
+        <li id="profile"><a href="./UserProfile.html">Welcome ${name}</a><span></span></li>
+        <li><a href="../homePage/home.html">Home </a><span>|</span></li>
+        <li><a href="../Products/Products.html">Products</a></li>
+      `;
+    }
+
+    if (rightUl) {
+      rightUl.innerHTML = `
+              <li><a href="../Products/OrderHistory.html" id="Orders-btn-right">My Orders</a></li><span>|</span></li>
+        <li><a href="../LandingPage/Support.html">Support </a><span>|</span></li>
+                <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
+
+        <li><a href="#" id="signout-btn-right">Sign out</a></li>
+
+      `;
+    }
+
+    attachSignout();
+  };
+
+  // Logged-out UI
+  const setLoggedOutUI = () => {
+    if (profileA) {
+      profileA.textContent = "Login";
+      profileA.href = "/auth/login.html";
+    }
+
+    if (leftUl) {
+      leftUl.innerHTML = `
+        <li id="profile"><a href="/UserProfile.html"></a><span></span></li>
+        <li><a href="../homePage/home.html">Home </a><span>|</span></li>
+        <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
+        <li><a href="../Products/Products.html">Products</a></li>
+      `;
+    }
+
+    if (rightUl) {
+      rightUl.innerHTML = `
+        <li><a href="../LandingPage/Support.html">Support </a><span>|</span></li>
+        <li><a href="../auth/login.html">Login </a> <span>|</span></li>
+        <li><a href="../auth/signup.html">Sign up </a></li>
+      `;
+    }
+  };
+
+  // keep sessionStorage in sync (optional)
+  if (user) {
+    sessionStorage.setItem("userId", user.uid);
+    setLoggedInUI(user);
+  } else {
+    sessionStorage.removeItem("userId");
+    setLoggedOutUI();
   }
 });
 
 export {
   auth,
-  db
+  db,   GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,signOut,createUserWithEmailAndPassword
 };
 
 
