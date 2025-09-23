@@ -1,7 +1,7 @@
 import { db, auth } from "../config.js";
-import { ref, get, child, push, set } 
+import { ref, get, child, push, set }
   from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { onAuthStateChanged } 
+import { onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 function getCart() {
@@ -71,10 +71,11 @@ async function loadOrders(userId) {
       div.innerHTML = `
         <h3>Order #${order.orderId}</h3>
         <p>Date: ${new Date(order.createdAt).toLocaleString()}</p>
-        <p>Total: $${order.totalPrice.toFixed(2)}</p>
+  
         <ul>
           ${order.items.map(it => `<li>${it.name} - ${it.quantity} × $${it.price} = $${it.total}</li>`).join("")}
         </ul>
+        <p>Total: $${order.totalPrice.toFixed(2)}</p>
         <hr>
       `;
       container.appendChild(div);
