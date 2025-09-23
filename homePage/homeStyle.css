@@ -143,7 +143,7 @@ padding:5px;
 .right-mid-nav {
   display: flex;
   gap: 20px;
-  align-items: center;a855f7
+  align-items: center;
 }
 
 .hotline span {
@@ -632,4 +632,7 @@ nav hr {
 
 .container {
   margin: 20px;
+}
+nav {
+  visibility: hidden;
 }

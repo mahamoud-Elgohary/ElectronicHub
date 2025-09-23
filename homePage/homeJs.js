@@ -1,5 +1,5 @@
 import {
-  db
+  db,auth,  onAuthStateChanged
 } from '../config.js';
 import {
   ref,
@@ -105,10 +105,55 @@ function alertBox(text, type) {
 
 //   Burger Menu
  const toggleBtn = document.getElementById("menu-toggle");
-  const leftSide = document.querySelector(".left-side");
-  const rightSide = document.querySelector(".right-side");
+  const leftSide = document.querySelector(".left-side ul");
+  const rightSide = document.querySelector(".right-side ul");
 
   toggleBtn.addEventListener("click", () => {
     leftSide.classList.toggle("active");
     rightSide.classList.toggle("active");
   });
+  onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // check if user is admin
+    if (user.email.endsWith("@electronichub.com")) {
+      // clear navbar
+      leftSide.innerHTML = `
+        <li id="profile"><a href="./UserProfile.html">Profile</a> <span>|</span></li>
+        <li><a href="../homePage/AdminPanel.html">Admin Panel</a> <span>|</span></li>
+        <li><a href="../LandingPage/TechnicalSupport.html">Technical Support</a></li>
+      `;
+
+      rightSide.innerHTML = `
+        <li><a href="../auth/logout.html">Logout</a></li>
+      `;  
+    } else {
+      leftSide.innerHTML = `
+        <li id="profile"><a href="./UserProfile.html">Profile</a> <span>|</span></li>
+        <li><a href="../homePage/home.html">Home </a><span>|</span></li>
+        <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
+        <li><a href="../Products/Products.html">Products</a></li>
+      `;
+
+      rightSide.innerHTML = `
+        <li><a href="../LandingPage/Support.html">Support </a><span>|</span></li>
+        <li><a href="../auth/logout.html">Logout</a></li>
+      `;
+    }
+  } else {
+    leftSide.innerHTML = `
+      <li><a href="../homePage/home.html">Home </a><span>|</span></li>
+      <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
+      <li><a href="../Products/Products.html">Products</a></li>
+    `;
+
+    rightSide.innerHTML = `
+      <li><a href="../LandingPage/Support.html">Support </a><span>|</span></li>
+      <li><a href="../auth/login.html">Login </a> <span>|</span></li>
+      <li><a href="../auth/signup.html">Sign up </a></li>
+    `;
+
+
+  }
+    document.querySelector("nav").style.visibility = "visible";
+
+});

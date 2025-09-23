@@ -29,16 +29,25 @@ export async function getNamesAndPrices() {
 export function addtocart(product) {
   const exs = cart[product.id]
   console.log(exs)
-  if (exs) {
+ if (exs) {
+    if (exs.quantity + (product.quantity || 1) > product.stock) {
+      alert("Not enough stock available!");
+      return;
+    }
     exs.quantity += product.quantity || 1;
-
   } else {
+    if (product.stock < 1) {
+      alert("This product is out of stock!");
+      return;
+    }
+
     cart[product.id] = {
       id: product.id,
       name: product.name,
       imageUrl: product.imageUrl,
       price: product.price,
-      quantity: product.quantity ? product.quantity : 1
+      quantity: product.quantity ? product.quantity : 1,
+       stock: product.stock
     }
   }
   saveData()
@@ -62,11 +71,14 @@ export function getAll() {
 
 export function increase(productId) {
   if (cart[productId]) {
-    cart[productId].quantity++
-    saveData()
+    if (cart[productId].quantity + 1 > cart[productId].stock) {
+      alert("Not enough stock available!");
+      return;
+    }
+    cart[productId].quantity++;
+    saveData();
     window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "inc", productId } }));
-
-    display()
+    display();
   }
 }
 

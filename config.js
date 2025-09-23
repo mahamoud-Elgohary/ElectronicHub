@@ -124,7 +124,7 @@ export {
   auth,
   db,   GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup,signOut,createUserWithEmailAndPassword
+  signInWithPopup,signOut,createUserWithEmailAndPassword,onAuthStateChanged
 };
 
 

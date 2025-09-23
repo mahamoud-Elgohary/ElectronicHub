@@ -157,12 +157,17 @@ async function getProducts() {
       container.appendChild(card);
 
       card.querySelector(".btn1").addEventListener("click", () => {
+       if (parseInt(product.qty, 10) < 1) {
+    alert("This product is out of stock!");
+    return;
+  }
         addtocart({
           id: id,
           name: product.ProductName,
           imageUrl: product.imageUrl,
           price: parseFloat(product.Price),
           quantity: 1,
+              stock: parseInt(product.qty, 10)   
         });
       });
       card.querySelector(".btn2").addEventListener("click", () => {
