@@ -172,7 +172,7 @@ export function updateNavbarCart() {
   navCart.innerHTML = `<a href="./cart.html"><i class="fa-solid fa-cart-shopping"></i><a> $${totalPrice.toFixed(2)}`;
 }
 
-document.addEventListener("DOMContentLoaded", updateNavbarCart());
+document.addEventListener("DOMContentLoaded", updateNavbarCart);
 
 
 ///////////////////////////Stripe integration////////////////////////////////////
@@ -196,6 +196,11 @@ window.addEventListener("cart:updated", () => {
   updateNavbarCart();
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  loadData();         
+  display();
+  updateNavbarCart(); 
+});
 
 
 

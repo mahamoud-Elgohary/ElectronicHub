@@ -245,6 +245,7 @@ window.addEventListener("load", getProducts);
 (function () {
   const PAGE_SIZE = 6;
   const container = document.getElementsByClassName("ShowProduct")[0];
+  if (!container) return; // ✅ Skip pagination if no container
 
 
   let pager = document.createElement("div");
@@ -296,4 +297,6 @@ window.addEventListener("load", getProducts);
       rebuildAndRender();
     }
   });
+
+  
 })();
