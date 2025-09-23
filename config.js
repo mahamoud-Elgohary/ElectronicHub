@@ -1,18 +1,25 @@
 // Import Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword,onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { getDatabase } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import {
+  getDatabase
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 
-// Your Firebase config 
+// Your Firebase config
 const firebaseConfig = {
-     apiKey: "AIzaSyBWW6-aR7jfNOjNEtJORxEsqjjMJ0cOk3w",
-    authDomain: "electronichub-22676.firebaseapp.com",
-    databaseURL:"https://electronichub-22676-default-rtdb.firebaseio.com",
-    projectId: "electronichub-22676",
-    storageBucket: "electronichub-22676.appspot.com",
-    messagingSenderId: "104130323974",
-    appId: "1:104130323974:web:9495c1c28539ad872cc587"
+  apiKey: "AIzaSyBWW6-aR7jfNOjNEtJORxEsqjjMJ0cOk3w",
+  authDomain: "electronichub-22676.firebaseapp.com",
+  databaseURL: "https://electronichub-22676-default-rtdb.firebaseio.com",
+  projectId: "electronichub-22676",
+  storageBucket: "electronichub-22676.appspot.com",
+  messagingSenderId: "104130323974",
+  appId: "1:104130323974:web:9495c1c28539ad872cc587"
 };
 
 // Initialize Firebase
@@ -25,7 +32,7 @@ onAuthStateChanged(auth, (user) => {
   const welcome = document.querySelector("#profile a");
   if (welcome) {
     if (user) {
-      const userName = user.email.split("@")[0];    
+      const userName = user.email.split("@")[0];
       welcome.textContent = `Welcome ${userName}`;
     } else {
       welcome.textContent = "Login";
@@ -34,7 +41,10 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-export{db,auth};
+export {
+  auth,
+  db
+};
 
 
 /*const form = document.getElementById("signup-form");

@@ -103,6 +103,3 @@ backHomeBtn.addEventListener("click", () => {
     window.location.href = "/homePage/home.html";
   }
 });
-
-
-

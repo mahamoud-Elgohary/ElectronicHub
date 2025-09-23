@@ -11,54 +11,64 @@
 </head>
 
 <body class="bg-light">
-  <nav class="border-bottom">
-    <div class="top-nav d-flex align-items-center justify-content-between px-3 py-2">
-      <button class="btn btn-link p-0" id="menu-toggle" aria-label="Toggle menu">
+  <!-- Navbar Start -->
+  <nav>
+    <!-- Top Nav -->
+    <div class="top-nav">
+      <div class="menu-toggle" id="menu-toggle">
         <i class="fa-solid fa-bars"></i>
-      </button>
+      </div>
 
       <div class="left-side">
-        <ul class="list-unstyled d-flex gap-2 m-0">
-          <li><a href="../homePage/home.html" class="text-decoration-none">Home</a><span class="mx-1">|</span></li>
-          <li><a href="../homePage/aboutus.html" class="text-decoration-none">About Us</a><span class="mx-1">|</span>
-          </li>
-          <li><a href="../Products/Products.html" class="text-decoration-none">Products</a></li>
+        <ul>
+          <li id="profile"><a href="./UserProfile.html"> </a> <span></span></li>
+
+          <li><a href="./home.html"> User Home</a><span>|</span></li>
+          <li><a href="./admin-support.html">Technical Support </a><span>|</span></li>
+          <li><a href="./AdminPanel.html">Admin Product</a></li>
         </ul>
       </div>
 
       <div class="right-side">
-        <ul class="list-unstyled d-flex gap-2 m-0">
-          <li><a href="#" class="text-decoration-none">Track Your Order</a><span class="mx-1">|</span></li>
-          <li><a href="../auth/login.html" class="text-decoration-none">Login</a><span class="mx-1">|</span></li>
-          <li><a href="../auth/signup.html" class="text-decoration-none">Sign up</a></li>
+        <ul>
+          <li><a href="../Products/Category.html">Categories </a><span>|</span></li>
+          <li><a href="./auth/login.html">Login </a> <span>|</span></li>
+          <li><a href="./auth/signup.html">Sign up </a></li>
         </ul>
       </div>
     </div>
 
-    <div class="mid-navbar d-flex align-items-center justify-content-between gap-3 px-3 py-3">
+    <hr>
+
+    <!-- Mid Navbar -->
+    <div class="mid-navbar">
       <div class="logo">
-        <h4 class="m-0">Ele<span>C</span>tonic HuB</h4>
+        <h4>Ele<span>C</span>tonic HuB</h4>
       </div>
 
-      <form id="search-form" class="d-flex align-items-center" role="search">
-        <input id="search-input" name="q" type="search" class="form-control" placeholder="Search for products"
-          aria-label="Search products" />
-        <button type="submit" class="btn btn-primary ms-2" aria-label="Search">
-          <i class="fa fa-search"></i>
-        </button>
-      </form>
+      <div class="search-bar">
+        <form action="" id="search-form">
+          <input type="text" placeholder="Search for products">
+          <button><i class="fa fa-search"></i></button>
+        </form>
+      </div>
 
-      <div class="right-mid-nav d-flex align-items-center gap-3">
-        <div class="hotline small">
-
-          <a href="../Products/cart.html" class="text-decoration-none" aria-label="Open cart">
+      <div class="right-mid-nav">
+        <div class="hotline">
+          <span><i class="fa-solid fa-phone"></i>19990 </span>
+        </div>
+        <div class="cart">
+          <a href="./Products/cart.html">
             <i class="fa-solid fa-cart-shopping"></i>
+
           </a>
         </div>
       </div>
+    </div>
   </nav>
+  <!-- Navbar End -->
 
-  <main class=" py-4">
+  <main class=" py-4" id="main">
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h1 class="h4 m-0">Products</h1>
       <button id="newProductBtn" class="btn btn-primary">+ New Product</button>
@@ -144,9 +154,10 @@
       </form>
     </div>
   </div>
-
-  <script type="module" src="./AdminPanel.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="AdminPanel.js"></script>
+  <script type="module" src="../config.js"></script>
+
 </body>
 
 </html>

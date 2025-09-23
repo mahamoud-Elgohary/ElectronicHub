@@ -1,6 +1,11 @@
-import { db } from '../config.js';
+import {
+  db
+} from '../config.js';
 
-import { onValue, ref, set } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js';
+import {
+  onValue,
+  ref
+} from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js';
 
 // function CreateCategory(Category_id, Categoryname, Categoryimage) {
 //   set(ref(db, 'Categories/' + Category_id), {
@@ -43,23 +48,23 @@ function ListenToCategories() {
     console.log('Updated Categories:', data);
 
     const container = document.getElementById('categories-list');
-    if (!container) return; 
-       container.innerHTML = '';
+    if (!container) return;
+    container.innerHTML = '';
 
-    if (!data) { 
+    if (!data) {
       container.innerHTML = '<p class="text-muted">No categories.</p>';
       return;
     }
 
-    Object.values(data).forEach((Category)=> {
-      const name = Category.Categoryname ;
-      const img = Category.Categoryimage ;
+    Object.values(data).forEach((Category) => {
+      const name = Category.Categoryname;
+      const img = Category.Categoryimage;
 
       console.log(img, name);
 
       const div = document.createElement('div');
       div.innerHTML = `
-        <a href="./Products.html?card=${encodeURIComponent(name)}" class="col-12 col-sm-6 col-md-4 col-lg-3">
+        <a href="../Products/Products.html?card=${encodeURIComponent(name)}" class="col-12 col-sm-6 col-md-4 col-lg-3">
           <div class="card h-100 shadow-sm">
             <div class="ratio ratio-16x9">
               <img src="${img}" alt="${name}" />
@@ -78,5 +83,6 @@ function ListenToCategories() {
 
 
 ListenToCategories();
-export { ListenToCategories };
-
+export {
+  ListenToCategories
+};

@@ -1,17 +1,27 @@
-import { db } from "../config.js";
-import { ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { addtocart, increase, decrease } from "./cart.js";
+import {
+  child,
+  get,
+  ref,
+  set
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import {
+  db
+} from "../config.js";
+import {
+  addtocart,
+  decrease
+} from "./cart.js";
 
 function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, qty, Description) {
   set(ref(db, 'Products/' + ProductId), {
-    ProductName: ProductName,
-    Price: Price,
-    Cost: Cost,
-    Discount: Discount,
-    qty: qty,
-    imageUrl: imageUrl,
-    Description: Description
-  })
+      ProductName: ProductName,
+      Price: Price,
+      Cost: Cost,
+      Discount: Discount,
+      qty: qty,
+      imageUrl: imageUrl,
+      Description: Description
+    })
     .then(() => {
       alert('success');
     })
@@ -42,7 +52,7 @@ export async function getAllProducts() {
 /* document.getElementsByClassName("ShowProduct").addEventListener("submit", (event) => {
   event.preventDefault();
 
-  const ProductId = Date.now().toString(); 
+  const ProductId = Date.now().toString();
   const ProductName = document.getElementById("PN").value;
   const Price = document.getElementById("Price").value;
   const Discount = document.getElementById("Dis").value;
@@ -56,11 +66,12 @@ export async function getAllProducts() {
 
 function getCategoryNameFromURL() {
   const p = new URLSearchParams(location.search);
-  const name= p.get("card") || ""; 
+  const name = p.get("card") || "";
   console.log(name)
   return name
 }
 getCategoryNameFromURL()
+
 function getCartTotalFromLS() {
   const cart = JSON.parse(localStorage.getItem("cart") || "{}");
   return Object.values(cart).reduce((sum, it) => sum + it.price * it.quantity, 0);
@@ -77,11 +88,11 @@ function updateCartSummaryUI() {
 }
 
 function filterProductsObject(allProducts) {
-if (!allProducts) {
+  if (!allProducts) {
     console.log("something is wrong");
     return {};
   }
- const wantedCategory = getCategoryNameFromURL();
+  const wantedCategory = getCategoryNameFromURL();
 
   if (!wantedCategory) {
     return allProducts;
@@ -101,7 +112,7 @@ if (!allProducts) {
 }
 async function getProducts() {
   const all = await getAllProducts();
-  const  products = filterProductsObject(all);
+  const products = filterProductsObject(all);
   const container = document.getElementsByClassName("ShowProduct")[0];
   if (!container) return;
   container.innerHTML = "";
@@ -125,23 +136,23 @@ async function getProducts() {
         </div>
 
       `;
-const btn1 = card.querySelector(".btn1");
-const btn2 = card.querySelector(".btn2");
-const qty = card.querySelector(".qty");
+      const btn1 = card.querySelector(".btn1");
+      const btn2 = card.querySelector(".btn2");
+      const qty = card.querySelector(".qty");
 
-let quantity = 0;
+      let quantity = 0;
 
-btn1.addEventListener("click", () => {
-  quantity++;
-  qty.textContent = quantity;
-});
+      btn1.addEventListener("click", () => {
+        quantity++;
+        qty.textContent = quantity;
+      });
 
-btn2.addEventListener("click", () => {
-  if (quantity > 0) {   
-    quantity--;
-    qty.textContent = quantity;
-  }
-});
+      btn2.addEventListener("click", () => {
+        if (quantity > 0) {
+          quantity--;
+          qty.textContent = quantity;
+        }
+      });
 
       container.appendChild(card);
 
@@ -153,11 +164,11 @@ btn2.addEventListener("click", () => {
           price: parseFloat(product.Price),
           quantity: 1,
         });
-        });
+      });
       card.querySelector(".btn2").addEventListener("click", () => {
         decrease(id);
 
-          updateCartSummaryUI(); 
+        updateCartSummaryUI();
 
         if (typeof display === "function") {
           display();
@@ -184,7 +195,7 @@ if (search) {
   });
 }
 
-/*  
+/*
 {
   const handler = () => {
     const current = parseInt(qtySpan.textContent, 10) || 0;
@@ -226,7 +237,63 @@ window.addEventListener("load", getProducts);
       <td><img src="${product.imageUrl}" width="50" height="50" alt="${product.ProductName}"></td>`;
     tbody.appendChild(row);
   });
-} */
+} */ ///////////////
 
 
 
+////////////////////////
+(function () {
+  const PAGE_SIZE = 6;
+  const container = document.getElementsByClassName("ShowProduct")[0];
+
+
+  let pager = document.createElement("div");
+  pager.id = "pager";
+  pager.className = "d-flex justify-content-between align-items-center mt-3";
+  pager.style.gap = "12px";
+  pager.innerHTML = `
+      <button id="prevPage" class="btn btn-outline-secondary btn-sm">Prev</button>
+      <span id="pageInfo" class="small text-muted"></span>
+      <button id="nextPage" class="btn btn-outline-secondary btn-sm">Next</button>
+    `;
+  container.after(pager);
+
+
+  const prevBtn = document.getElementById("prevPage");
+  const nextBtn = document.getElementById("nextPage");
+  const pageInfo = document.getElementById("pageInfo");
+  let page = 1;
+
+  const allCards = () => Array.from(container.getElementsByClassName("ShowProduct-card"));
+
+  function rebuildAndRender() {
+    const cards = allCards();
+    const totalPages = Math.max(1, Math.ceil(cards.length / PAGE_SIZE));
+    page = Math.min(Math.max(page, 1), totalPages);
+
+    cards.forEach(c => (c.style.display = "none"));
+
+    const start = (page - 1) * PAGE_SIZE;
+    cards.slice(start, start + PAGE_SIZE).forEach(c => (c.style.display = ""));
+
+    pageInfo.textContent = `Page ${page} / ${totalPages} • ${cards.length} items`;
+    prevBtn.disabled = page <= 1;
+    nextBtn.disabled = page >= totalPages;
+  }
+
+  prevBtn.addEventListener("click", () => {
+    page--;
+    rebuildAndRender();
+  });
+
+  nextBtn.addEventListener("click", () => {
+    page++;
+    rebuildAndRender();
+  });
+
+  window.addEventListener("load", () => {
+    if (allCards().length) {
+      rebuildAndRender();
+    }
+  });
+})();

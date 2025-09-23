@@ -3,7 +3,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
   getAuth,
-  signInWithEmailAndPassword,  GoogleAuthProvider,  signInWithPopup
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -37,9 +39,9 @@ googleBtn.addEventListener("click", async () => {
 
     // redirect same as email login
     if (user.email.endsWith("@electronichub.com")) {
-      window.location.href = "/homePage/AdminPanel.html";
+      window.location.href = "../homePage/AdminPanel.html";
     } else {
-      window.location.href = "/homePage/home.html";
+      window.location.href = "../homePage/home.html";
     }
   } catch (error) {
     alert("Google login failed: " + error.message);
