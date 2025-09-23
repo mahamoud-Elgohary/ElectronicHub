@@ -18,7 +18,7 @@
       <div class="menu-toggle" id="menu-toggle">
         <i class="fa-solid fa-bars"></i>
       </div>
-
+      <!-- left side-->
       <div class="left-side">
         <ul>
           <li id="profile"><a href="./UserProfile.html"> </a> <span></span></li>
@@ -32,8 +32,8 @@
       <div class="right-side">
         <ul>
           <li><a href="../Products/Category.html">Categories </a><span>|</span></li>
-          <li><a href="./auth/login.html">Login </a> <span>|</span></li>
-          <li><a href="./auth/signup.html">Sign up </a></li>
+          <li><a href="../auth/login.html">Login </a> <span>|</span></li>
+          <li><a href="../auth/signup.html">Sign up </a></li>
         </ul>
       </div>
     </div>
@@ -47,9 +47,9 @@
       </div>
 
       <div class="search-bar">
-        <form action="" id="search-form">
+        <form action="#" id="top-search">
           <input type="text" placeholder="Search for products">
-          <button><i class="fa fa-search"></i></button>
+          <button type="submit"><i class="fa fa-search"></i></button>
         </form>
       </div>
 
@@ -58,21 +58,61 @@
           <span><i class="fa-solid fa-phone"></i>19990 </span>
         </div>
         <div class="cart">
-          <a href="./Products/cart.html">
+          <a href="../Products/cart.html">
             <i class="fa-solid fa-cart-shopping"></i>
-
           </a>
         </div>
       </div>
     </div>
+
+
+
+
   </nav>
   <!-- Navbar End -->
 
   <main class=" py-4" id="main">
+
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h1 class="h4 m-0">Products</h1>
       <button id="newProductBtn" class="btn btn-primary">+ New Product</button>
     </div>
+
+    <div class="row g-2 mb-3">
+      <div class="col-12 col-md-3">
+        <form id="search-form" action="#">
+          <input id="search-input" class="form-control" placeholder="Search name or category">
+        </form>
+      </div>
+
+      <div class="col-6 col-md-2">
+        <select id="filter-category" class="form-select">
+          <option value="">All categories</option>
+        </select>
+      </div>
+
+      <div class="col-3 col-md-2">
+        <input id="filter-min" type="number" min="0" step="0.01" class="form-control" placeholder="Min price">
+      </div>
+
+      <div class="col-3 col-md-2">
+        <input id="filter-max" type="number" min="0" step="0.01" class="form-control" placeholder="Max price">
+      </div>
+
+      <div class="col-12 col-md-3">
+        <div class="input-group">
+          <select id="sort-key" class="form-select">
+            <option value="">Sort by…</option>
+            <option value="ProductName">Name</option>
+            <option value="Price">Price</option>
+            <option value="qty">Qty</option>
+            <option value="Discount">Discount</option>
+          </select>
+          <button id="sort-dir" type="button" class="btn btn-outline-secondary" title="Toggle">⬆️</button>
+        </div>
+      </div>
+    </div>
+
 
     <div class="table-responsive">
       <table class="table align-middle table-striped table-bordered">
@@ -93,11 +133,15 @@
       </table>
     </div>
 
-    <div class="d-flex gap-2 justify-content-end">
+    <div class="d-flex gap-2 justify-content-end align-items-center">
       <button class="btn btn-outline-secondary btn-sm" id="prevPage">Prev</button>
       <span id="pageInfo" class="align-self-center small text-muted"></span>
+      <input id="gotoPage" class="form-control form-control-sm" type="number" min="1" placeholder="Go to…"
+        style="width:90px">
+      <button id="goBtn" class="btn btn-outline-secondary btn-sm">Go</button>
       <button class="btn btn-outline-secondary btn-sm" id="nextPage">Next</button>
     </div>
+
   </main>
 
   <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
@@ -107,6 +151,7 @@
           <h5 class="modal-title" id="productModalLabel">New Product</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" title="Close"></button>
         </div>
+
         <div class="modal-body">
           <input type="hidden" id="field_id" name="id" />
           <div class="mb-2">

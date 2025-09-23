@@ -15,13 +15,19 @@ const tbody = document.getElementById("productsBody");
 const searchForm = document.getElementById("search-form");
 const searchInput = document.getElementById("search-input");
 const newProductBtn = document.getElementById("newProductBtn");
+const filterCategory = document.getElementById("filter-category");
 const formEl = document.getElementById("productForm");
 const productModal = document.getElementById("productModal");
 const modalLabel = document.getElementById("productModalLabel");
 const pageInfo = document.getElementById("pageInfo");
 const prevPageBtn = document.getElementById("prevPage");
 const nextPageBtn = document.getElementById("nextPage");
-
+const filterMin = document.getElementById("filter-min");
+const filterMax = document.getElementById("filter-max");
+const sortKeySel = document.getElementById("sort-key");
+const sortDirBtn = document.getElementById("sort-dir");
+const gotoPageInput = document.getElementById("gotoPage");
+const goBtn = document.getElementById("goBtn");
 const PAGE_SIZE = 5;
 let allProducts = [];
 let shownProducts = []
@@ -29,6 +35,16 @@ let filtered = [];
 let currentPage = 1;
 let openCloseModel;
 
+
+
+
+let sortKey = "";
+let sortDir = 1;
+let filters = {
+  category: "",
+  min: null,
+  max: null
+};
 //function asNumber(v, fallback = 0) {
 // const n = parseFloat(v);
 //return Number.isFinite(n) ? n : fallback;
@@ -59,7 +75,7 @@ async function fetchAll() {
 
 
 function renderTable(list) {
-  const rows = list.map((element) => {
+  const html = list.map((element) => {
     const price = Number(element.Price).toFixed(2);
     const cost = Number(element.Cost).toFixed(2);
     const discount = Number(element.Discount).toFixed(2);
@@ -86,20 +102,42 @@ function renderTable(list) {
       </tr>`;
   }).join("");
 
-  tbody.innerHTML = rows;
+  tbody.innerHTML = html;
 }
 
 function applySearch() {
-  const searchTerm = (searchInput && searchInput.value ? searchInput.value : "").toLowerCase().trim();
-  if (!searchTerm) {
-    shownProducts = allProducts.slice();
-  } else {
-    shownProducts = allProducts.filter(function (element) {
-      const name = (element.ProductName || "").toLowerCase();
-      const catego = (element.Categoryname || "").toLowerCase();
-      return name.includes(searchTerm) || catego.includes(searchTerm);
-    })
+  const term = (searchInput && searchInput.value ? searchInput.value : "")
+    .toLowerCase()
+    .trim();
+
+
+  shownProducts = allProducts.filter(pro => {
+    const name = (pro.ProductName || "").toLowerCase();
+    const cat = (pro.Categoryname || "").toLowerCase();
+    const price = Number(pro.Price) || 0;
+
+    if (filters.category && (pro.Categoryname || "") !== filters.category) return false;
+    if (filters.min != null && price < filters.min) return false;
+    if (filters.max != null && price > filters.max) return false;
+
+    if (term && !(name.includes(term) || cat.includes(term))) return false;
+    return true;
+  });
+
+
+  if (sortKey) {
+    const key = sortKey;
+    const isText = (key === "ProductName" || key === "Categoryname");
+    shownProducts.sort((a, b) => {
+      const va = isText ? (a[key] || "").toString().toLowerCase() : (Number(a[key]) || 0);
+      const vb = isText ? (b[key] || "").toString().toLowerCase() : (Number(b[key]) || 0);
+      if (va < vb) return -1 * sortDir;
+      if (va > vb) return 1 * sortDir;
+      return 0;
+    });
   }
+
+
   currentPage = 1;
   renderPage();
 }
@@ -118,6 +156,14 @@ function renderPage() {
 
 async function loadProducts() {
   allProducts = await fetchAll();
+
+
+  if (filterCategory) {
+    const cats = Array.from(new Set(allProducts.map(p => p.Categoryname).filter(Boolean))).sort();
+    filterCategory.innerHTML = `<option value="">All categories</option>` +
+      cats.map(c => `<option value="${c}">${c}</option>`).join("");
+  }
+
   applySearch();
 }
 
@@ -261,12 +307,48 @@ tbody.addEventListener("click", async function (event) {
   }
 });
 
-searchForm.addEventListener("submit", function (event) {
-  event.preventDefault();
-  applySearch();
-});
+
 if (searchInput) {
   searchInput.addEventListener("input", applySearch);
+}
+if (searchForm) {
+  searchForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    applySearch();
+  });
+}
+if (filterMin) {
+  filterMin.addEventListener("input", () => {
+    const v = filterMin.value.trim();
+    filters.min = v === "" ? null : Math.max(0, Number(v));
+    applySearch();
+  });
+}
+if (filterMax) {
+  filterMax.addEventListener("input", () => {
+    const v = filterMax.value.trim();
+    filters.max = v === "" ? null : Math.max(0, Number(v));
+    applySearch();
+  });
+}
+if (filterCategory) {
+  filterCategory.addEventListener("change", () => {
+    filters.category = filterCategory.value || "";
+    applySearch();
+  });
+}
+if (sortKeySel) {
+  sortKeySel.addEventListener("change", () => {
+    sortKey = sortKeySel.value || "";
+    applySearch();
+  });
+}
+if (sortDirBtn) {
+  sortDirBtn.addEventListener("click", () => {
+    sortDir *= -1;
+    sortDirBtn.textContent = (sortDir === 1 ? "⬆️" : "⬇️");
+    applySearch();
+  });
 }
 prevPageBtn.addEventListener("click", function () {
   currentPage = Math.max(1, currentPage - 1);
@@ -282,7 +364,19 @@ window.addEventListener("load", async function () {
   await loadProducts()
   applySearch();
 });
-
+if (goBtn && gotoPageInput) {
+  const goHandler = () => {
+    const totalPages = Math.max(1, Math.ceil(shownProducts.length / PAGE_SIZE));
+    const n = Math.max(1, Math.min(totalPages, parseInt(gotoPageInput.value || "1", 10)));
+    currentPage = n;
+    renderPage();
+  };
+  goBtn.addEventListener("click", goHandler);
+  gotoPageInput.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") goHandler();
+  });
+  window.addEventListener("load", loadProducts);
+}
 
 //   Burger Menu
 const toggleBtn = document.getElementById("menu-toggle");
@@ -293,3 +387,4 @@ toggleBtn.addEventListener("click", () => {
   leftSide.classList.toggle("active");
   rightSide.classList.toggle("active");
 });
+document.getElementById('top-search')?.addEventListener('submit', e => e.preventDefault());
