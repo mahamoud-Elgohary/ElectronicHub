@@ -1,13 +1,31 @@
-import { child, get, ref, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { db } from "../config.js";
-import { addtocart, decrease } from "./cart.js";
+import {
+  child,
+  get,
+  ref,
+  set
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import {
+  db
+} from "../config.js";
+import {
+  addtocart,
+  decrease
+} from "./cart.js";
 
 function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, qty, Description) {
-  return set(ref(db, "Products/" + ProductId), {
-    ProductName, Price, Cost, Discount, qty, imageUrl, Description,
-  })
-    .then(() => alert("success"))
-    .catch((err) => {
+  set(ref(db, 'Products/' + ProductId), {
+      ProductName: ProductName,
+      Price: Price,
+      Cost: Cost,
+      Discount: Discount,
+      qty: qty,
+      imageUrl: imageUrl,
+      Description: Description
+    })
+    .then(() => {
+      alert('success');
+    })
+    .catch(err => {
       console.error("Firebase error:", err);
       alert("Error: " + err.message);
     });
@@ -15,260 +33,241 @@ function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, 
 
 export async function getAllProducts() {
   try {
-    const snap = await get(child(ref(db), "Products"));
-    if (snap.exists()) return snap.val();
-    console.log("No products found");
-    return null;
+    const dbRef = ref(db);
+    const item = await get(child(dbRef, "Products"));
+    if (item.exists()) {
+      return item.val();
+    } else {
+      console.log("No products found");
+      return null;
+    }
   } catch (error) {
     console.error("Error reading data:", error);
     return null;
   }
 }
 
+/********************************************Write data***************************************************************************/
+
+/* document.getElementsByClassName("ShowProduct").addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const ProductId = Date.now().toString();
+  const ProductName = document.getElementById("PN").value;
+  const Price = document.getElementById("Price").value;
+  const Discount = document.getElementById("Dis").value;
+  const Cost = document.getElementById("cost").value;
+  const qty = document.getElementById("qty").value;
+  const imageUrl = document.getElementById("img").value;
+
+  writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, qty);
+}); */
+/******************************************Read data Function*************************************************************************/
+
 function getCategoryNameFromURL() {
   const p = new URLSearchParams(location.search);
-  return p.get("card") || "";
+  const name = p.get("card") || "";
+  console.log(name)
+  return name
 }
-function toArray(obj) {
-  const arr = [];
-  for (const id in obj) arr.push({ id, ...obj[id] });
-  return arr;
-}
-function num(v, d = 0) {
-  const n = parseFloat(v);
-  return Number.isFinite(n) ? n : d;
-}
+getCategoryNameFromURL()
 
 function getCartTotalFromLS() {
   const cart = JSON.parse(localStorage.getItem("cart") || "{}");
   return Object.values(cart).reduce((sum, it) => sum + it.price * it.quantity, 0);
 }
+
+// function getQtyFromLS(id) {
+//   const cart = JSON.parse(localStorage.getItem("cart") || "{}");
+//   return cart[id]?.quantity || 0;
+// }
+
 function updateCartSummaryUI() {
   const el = document.getElementById("cart-total");
   if (el) el.textContent = getCartTotalFromLS().toFixed(2);
 }
 
-// نفس الممسك القديم
-const sidebarBox = document.getElementById("sidebar-categories");
+function filterProductsObject(allProducts) {
+  if (!allProducts) {
+    console.log("something is wrong");
+    return {};
+  }
+  const wantedCategory = getCategoryNameFromURL();
 
-// استبدل الدالة كلها بهذا التنفيذ البسيط
-function renderSidebarCategories(allProducts) {
-  if (!sidebarBox || !allProducts) return;
-
-  const cats = [...new Set(
-    Object.values(allProducts)
-      .map(p => String(p?.Categoryname || "Uncategorized").trim())
-      .filter(Boolean)
-  )].sort((a, b) => a.localeCompare(b));
-
-  sidebarBox.innerHTML = `
-    <div class="list-group">
-      <a href="${location.pathname}" class="list-group-item list-group-item-action">All</a>
-      ${cats.map(c =>
-        `<a href="?card=${encodeURIComponent(c)}" class="list-group-item list-group-item-action">${c}</a>`
-      ).join("")}
-    </div>
-  `;
-}
-
-
-let ALL = null;
-let searchTerm = "";
-let filters = { min: null, max: null };
-let sortKey = "";
-let sortDir = 1;
-const PAGE_SIZE = 6;
-
-const sortSel  = document.getElementById("sort-key");
-const minEl    = document.getElementById("filter-min");
-const maxEl    = document.getElementById("filter-max");
-const applyBtn = document.getElementById("filter-apply");
-const clearBtn = document.getElementById("filter-clear");
-const searchFormEl = document.getElementById("search-form");
-const searchInput  = document.getElementById("search-input");
-
-function pipeline(allObj) {
-  if (!allObj) return [];
-  let list = toArray(allObj);
-
-  const wanted = getCategoryNameFromURL();
-  if (wanted) list = list.filter(p => String(p.Categoryname) === wanted);
-
-  if (searchTerm) {
-    const q = searchTerm.toLowerCase();
-    list = list.filter(p => (p.ProductName || "").toLowerCase().includes(q));
+  if (!wantedCategory) {
+    return allProducts;
   }
 
-  const min = filters.min;
-  const max = filters.max;
-  if (min != null) list = list.filter(p => num(p.Price) >= min);
-  if (max != null) list = list.filter(p => num(p.Price) <= max);
+  const result = {};
+  for (let productId in allProducts) {
+    const product = allProducts[productId];
 
-  if (sortKey) {
-    const K = sortKey;
-    list.sort((a, b) => {
-      let av, bv;
-      if (K === "price")    { av = num(a.Price);      bv = num(b.Price); }
-      else if (K === "name"){ av = (a.ProductName || "").toLowerCase(); bv = (b.ProductName || "").toLowerCase(); }
-      else if (K === "discount"){ av = num(a.Discount); bv = num(b.Discount); }
-      else if (K === "qty") { av = num(a.qty);        bv = num(b.qty); }
-      else { av = 0; bv = 0; }
-
-      if (av < bv) return -1 * sortDir;
-      if (av > bv) return  1 * sortDir;
-      const an = (a.ProductName || "").toLowerCase();
-      const bn = (b.ProductName || "").toLowerCase();
-      if (an < bn) return -1;
-      if (an > bn) return  1;
-      return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
-    });
+    if (product && product.Categoryname === wantedCategory) {
+      result[productId] = product;
+    }
   }
 
-  return list;
-}
+  return result;
 
-function render(list) {
+}
+async function getProducts() {
+  const all = await getAllProducts();
+  const products = filterProductsObject(all);
   const container = document.getElementsByClassName("ShowProduct")[0];
   if (!container) return;
+  container.innerHTML = "";
 
-  if (!list.length) {
-    container.innerHTML = `<div class="alert alert-warning">No products match your filters.</div>`;
-    window.dispatchEvent(new Event("products:reset"));
+  for (let id in products) {
+    if (products.hasOwnProperty(id)) {
+      const product = products[id];
+
+      const card = document.createElement("div");
+      card.classList.add("ShowProduct-card");
+
+      card.innerHTML = `
+        <img src="${product.imageUrl}">
+        <h4>${product.ProductName}</h4>
+        <p>Description:${product.Description}</p>
+        <p class="price">$${product.Price}</p>
+        <div class="btns">
+        <button class="btn btn-success btn1">+</button>
+            <span class="qty"></span>
+        <button class="btn btn-danger btn2">-</button>
+        </div>
+
+      `;
+      const btn1 = card.querySelector(".btn1");
+      const btn2 = card.querySelector(".btn2");
+      const qty = card.querySelector(".qty");
+
+      let quantity = 0;
+
+      btn1.addEventListener("click", () => {
+        quantity++;
+        qty.textContent = quantity;
+      });
+
+      btn2.addEventListener("click", () => {
+        if (quantity > 0) {
+          quantity--;
+          qty.textContent = quantity;
+        }
+      });
+
+      container.appendChild(card);
+
+      card.querySelector(".btn1").addEventListener("click", () => {
+       if (parseInt(product.qty, 10) < 1) {
+    alert("This product is out of stock!");
     return;
   }
-
-  const fr = document.createDocumentFragment();
-
-  list.forEach((product) => {
-    const card = document.createElement("div");
-    card.className = "ShowProduct-card";
-    card.innerHTML = `
-      <img src="${product.imageUrl}" alt="${product.ProductName || "Product"}" />
-      <h4>${product.ProductName || "Product"}</h4>
-      <p>Description: ${product.Description || ""}</p>
-      <p class="price">$${num(product.Price).toFixed(2)}</p>
-      <div class="btns d-flex align-items-center gap-2">
-        <button class="btn btn-success btn1" aria-label="Add one">+</button>
-        <span class="qty" aria-live="polite">0</span>
-        <button class="btn btn-danger btn2" aria-label="Remove one">-</button>
-      </div>
-    `;
-
-    const incBtn = card.querySelector(".btn1");
-    const decBtn = card.querySelector(".btn2");
-    const qtyEl  = card.querySelector(".qty");
-    let localQty = 0;
-
-    incBtn.addEventListener("click", () => {
-      localQty++;
-      qtyEl.textContent = localQty;
-      addtocart({
-        id: product.id,
-        name: product.ProductName,
-        imageUrl: product.imageUrl,
-        price: num(product.Price),
-        quantity: 1,
+        addtocart({
+          id: id,
+          name: product.ProductName,
+          imageUrl: product.imageUrl,
+          price: parseFloat(product.Price),
+          quantity: 1,
+              stock: parseInt(product.qty, 10)   
+        });
       });
-      updateCartSummaryUI();
-      if (typeof window.display === "function") window.display();
-    });
+      card.querySelector(".btn2").addEventListener("click", () => {
+        decrease(id);
 
-    decBtn.addEventListener("click", () => {
-      if (localQty > 0) {
-        localQty--;
-        qtyEl.textContent = localQty;
-      }
-      decrease(product.id);
-      updateCartSummaryUI();
-      if (typeof window.display === "function") window.display();
-    });
+        updateCartSummaryUI();
 
-    fr.appendChild(card);
-  });
-
-  container.innerHTML = "";
-  container.appendChild(fr);
-  window.dispatchEvent(new Event("products:reset"));
-}
-
-function rebuildUI(resetPage = true) {
-  const list = pipeline(ALL || {});
-  render(list);
-  if (!resetPage) window.dispatchEvent(new Event("products:rebuild"));
-}
-
-if (searchFormEl) searchFormEl.addEventListener("submit", (e) => e.preventDefault());
-if (searchInput) {
-  searchInput.addEventListener("input", () => {
-    searchTerm = (searchInput.value || "").trim().toLowerCase();
-    rebuildUI(true);
-  });
-}
-
-if (sortSel) {
-  sortSel.addEventListener("change", () => {
-    const v = sortSel.value || "";
-    if (!v) {
-      sortKey = "";
-      sortDir = 1;
-    } else {
-      const [k, d] = v.split("-");
-      sortKey = k || "";
-      sortDir = d === "desc" ? -1 : 1;
+        if (typeof display === "function") {
+          display();
+        }
+      });
     }
-    rebuildUI(true);
-  });
-}
-
-function applyPriceFilter() {
-  const minV = minEl?.value?.trim();
-  const maxV = maxEl?.value?.trim();
-  const min = minV === "" ? null : num(minV, null);
-  const max = maxV === "" ? null : num(maxV, null);
-  if (min != null && max != null && min > max) {
-    filters = { min: max, max: min };
-    if (minEl) minEl.value = String(filters.min);
-    if (maxEl) maxEl.value = String(filters.max);
-  } else {
-    filters = { min, max };
   }
-  rebuildUI(true);
 }
-applyBtn?.addEventListener("click", applyPriceFilter);
-[minEl, maxEl].forEach((input) => {
-  input?.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      applyPriceFilter();
+
+
+
+
+/*******************************Searchbar*********************************************************/
+const search = document.querySelector(".search-bar-form input[type='text']");
+const cards = document.getElementsByClassName("ShowProduct-card");
+if (search) {
+  search.addEventListener("input", () => {
+    const unicase = search.value.toLowerCase();
+    for (let i = 0; i < cards.length; i++) {
+      const product = cards[i];
+      const name = product.querySelector("h4").textContent.toLowerCase();
+      product.style.display = name.includes(unicase) ? "" : "none";
     }
   });
-});
-clearBtn?.addEventListener("click", () => {
-  if (minEl) minEl.value = "";
-  if (maxEl) maxEl.value = "";
-  filters = { min: null, max: null };
-  rebuildUI(true);
-});
+}
 
+/*
+{
+  const handler = () => {
+    const current = parseInt(qtySpan.textContent, 10) || 0;
+    if (current <= 0) return;
+
+    decrease(id);
+    const q = getQtyFromLS(id);
+    qtySpan.textContent = q;
+    lineAmount.textContent = (price * q).toFixed(2);
+    if (q === 0) decBtn.setAttribute("disabled", "true");
+    updateCartSummaryUI();
+  };
+
+  if (typeof decBtn !== "undefined" && decBtn && typeof handler === "function") {
+    decBtn.addEventListener("click", handler);
+  }
+}
+*/
+
+window.addEventListener("load", getProducts);
+
+/* async function renderTable() {
+  const products = await getAllProducts();
+  const tbody = document
+    .getElementById("products-table")
+    .getElementsByTagName("tbody")[0];
+
+  tbody.innerHTML = "";
+  Object.entries(products).forEach(([id, product]) => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td>${id}</td>
+      <td>${product.ProductName}</td>
+      <td>${product.Price}</td>
+      <td>${product.Cost}</td>
+      <td>${product.Discount}</td>
+      <td>${product.qty}</td>
+      <td><img src="${product.imageUrl}" width="50" height="50" alt="${product.ProductName}"></td>`;
+    tbody.appendChild(row);
+  });
+} */ ///////////////
+
+
+
+////////////////////////
 (function () {
+  const PAGE_SIZE = 6;
   const container = document.getElementsByClassName("ShowProduct")[0];
-  if (!container) return;
+  if (!container) return; // ✅ Skip pagination if no container
 
-  const pager = document.createElement("div");
+
+  let pager = document.createElement("div");
   pager.id = "pager";
   pager.className = "d-flex justify-content-between align-items-center mt-3";
   pager.style.gap = "12px";
   pager.innerHTML = `
-    <button id="prevPage" class="btn btn-outline-secondary btn-sm">Prev</button>
-    <span id="pageInfo" class="small text-muted"></span>
-    <button id="nextPage" class="btn btn-outline-secondary btn-sm">Next</button>
-  `;
+      <button id="prevPage" class="btn btn-outline-secondary btn-sm">Prev</button>
+      <span id="pageInfo" class="small text-muted"></span>
+      <button id="nextPage" class="btn btn-outline-secondary btn-sm">Next</button>
+    `;
   container.after(pager);
+
 
   const prevBtn = document.getElementById("prevPage");
   const nextBtn = document.getElementById("nextPage");
   const pageInfo = document.getElementById("pageInfo");
-
   let page = 1;
 
   const allCards = () => Array.from(container.getElementsByClassName("ShowProduct-card"));
@@ -278,29 +277,31 @@ clearBtn?.addEventListener("click", () => {
     const totalPages = Math.max(1, Math.ceil(cards.length / PAGE_SIZE));
     page = Math.min(Math.max(page, 1), totalPages);
 
-    cards.forEach((c) => (c.style.display = "none"));
+    cards.forEach(c => (c.style.display = "none"));
+
     const start = (page - 1) * PAGE_SIZE;
-    cards.slice(start, start + PAGE_SIZE).forEach((c) => (c.style.display = ""));
+    cards.slice(start, start + PAGE_SIZE).forEach(c => (c.style.display = ""));
 
     pageInfo.textContent = `Page ${page} / ${totalPages} • ${cards.length} items`;
     prevBtn.disabled = page <= 1;
     nextBtn.disabled = page >= totalPages;
   }
 
-  prevBtn.addEventListener("click", () => { page--; rebuildAndRender(); });
-  nextBtn.addEventListener("click", () => { page++; rebuildAndRender(); });
+  prevBtn.addEventListener("click", () => {
+    page--;
+    rebuildAndRender();
+  });
 
-  window.addEventListener("products:rebuild", rebuildAndRender);
-  window.addEventListener("products:reset",   () => { page = 1; rebuildAndRender(); });
+  nextBtn.addEventListener("click", () => {
+    page++;
+    rebuildAndRender();
+  });
 
   window.addEventListener("load", () => {
-    if (allCards().length) rebuildAndRender();
+    if (allCards().length) {
+      rebuildAndRender();
+    }
   });
-})();
 
-async function boot() {
-  ALL = await getAllProducts();
-  renderSidebarCategories(ALL);
-  rebuildUI(true);
-}
-window.addEventListener("load", boot);
+  
+})();
