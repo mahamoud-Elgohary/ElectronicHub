@@ -150,18 +150,23 @@ async function getProducts() {
       const card = document.createElement("div");
       card.classList.add("ShowProduct-card");
 
-      card.innerHTML = `
-        <img src="${product.imageUrl}">
-        <h4>${product.ProductName}</h4>
-        <p>Description:${product.Description}</p>
-        <p class="price">$${product.Price}</p>
-        <div class="btns">
-        <button class="btn btn-success btn1">+</button>
-            <span class="qty"></span>
-        <button class="btn btn-danger btn2">-</button>
-        </div>
+card.innerHTML = `
+<a href="./details.html?id=${id}" class="link-dark text-decoration-none">
+  <img src="${product.imageUrl}" alt="${product.ProductName}">
+  <h4 class="mt-2">
+    ${product.ProductName}
+  </h4>
+  <p>Description: ${product.Description || ""}</p>
+  <p class="price">$${product.Price}</p>
 
-      `;
+  <div class="btns d-flex align-items-center gap-2">
+    <button class="btn btn-success btn1" aria-label="Add one">+</button>
+    <span class="qty" aria-live="polite">0</span>
+    <button class="btn btn-danger btn2" aria-label="Remove one">-</button>
+  </div>
+  </a>
+`;
+
       const btn1 = card.querySelector(".btn1");
       const btn2 = card.querySelector(".btn2");
       const qty = card.querySelector(".qty");
