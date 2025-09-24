@@ -117,18 +117,20 @@ onAuthStateChanged(auth, (user) => {
       //   <li><a href="../auth/logout.html">Logout</a></li>
       // `;
     } else {
+      
+
       leftSide.innerHTML = `
-        <li id="profile"><a href="./UserProfile.html">Profile</a> <span>|</span></li>
+        <li id="profile"><a href="./UserProfile.html">Welcome ${name}</a> <span>|</span></li>
         <li><a href="../homePage/home.html">Home </a><span>|</span></li>
         <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
         <li><a href="../Products/Products.html">Products</a></li>
       `;
 
-     
+
     }
   } else {
     leftSide.innerHTML = `
-    
+      <li id="profile"><a href="./UserProfile.html">Profile</a> <span>|</span></li>
       <li><a href="./homePage/home.html">Home </a><span>|</span></li>
       <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
       <li><a href="../Products/Products.html">Products</a></li>

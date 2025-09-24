@@ -5,10 +5,10 @@ import {
 import {
   getAuth,
   onAuthStateChanged,
-   GoogleAuthProvider,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut,createUserWithEmailAndPassword
+  signOut, createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
   getDatabase
@@ -55,36 +55,48 @@ onAuthStateChanged(auth, (user) => {
     });
   };
 
+  
   const setLoggedInUI = (u) => {
     const name = u && u.email ? u.email.split("@")[0] : "User";
 
-    if (profileA) {
-      profileA.textContent = `Welcome ${name}`;
-      profileA.href = "../homePage/UserProfile.html"; 
-    }
+    if (u.email.endsWith("@electronichub.com")) {
+      // 🔹 Admin Navbar
+      if (leftUl) {
+        leftUl.innerHTML = `
+        <li id="profile"><a href="../homePage/UserProfile.html">Welcome ${name}</a><span>|</span></li>
+        <li><a href="../homePage/AdminPanel.html">Admin Panel</a><span>|</span></li>
+        <li><a href="../homePage/admin-support.html">Technical Support</a></li>
+      `;
+      }
 
-    if (leftUl) {
-      leftUl.innerHTML = `
-        <li id="profile"><a href="./UserProfile.html">Welcome ${name}</a><span></span></li>
+      if (rightUl) {
+        rightUl.innerHTML = `
+        <li><a href="../LandingPage/Support.html">Support </a><span>|</span></li>
+        <li><a href="#" id="signout-btn-right">Sign out</a></li>
+      `;
+      }
+    } else {
+      // 🔹 Normal User Navbar
+      if (leftUl) {
+        leftUl.innerHTML = `
+        <li id="profile"><a href="../homePage/UserProfile.html">Welcome ${name}</a><span>|</span></li>
         <li><a href="../homePage/home.html">Home </a><span>|</span></li>
         <li><a href="../Products/Products.html">Products</a></li>
       `;
-    }
+      }
 
-    if (rightUl) {
-      rightUl.innerHTML = `
-              <li><a href="../Products/OrderHistory.html" id="Orders-btn-right">My Orders</a></li><span>|</span></li>
+      if (rightUl) {
+        rightUl.innerHTML = `
+        <li><a href="../Products/OrderHistory.html" id="Orders-btn-right">My Orders</a></li><span>|</span></li>
         <li><a href="../LandingPage/Support.html">Support </a><span>|</span></li>
-                <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
-
+        <li><a href="../LandingPage/AboutUs.html">About Us </a><span>|</span></li>
         <li><a href="#" id="signout-btn-right">Sign out</a></li>
-
       `;
+      }
     }
 
     attachSignout();
   };
-
   // Logged-out UI
   const setLoggedOutUI = () => {
     if (profileA) {
@@ -122,9 +134,9 @@ onAuthStateChanged(auth, (user) => {
 
 export {
   auth,
-  db,   GoogleAuthProvider,
+  db, GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup,signOut,createUserWithEmailAndPassword,onAuthStateChanged
+  signInWithPopup, signOut, createUserWithEmailAndPassword, onAuthStateChanged
 };
 
 
