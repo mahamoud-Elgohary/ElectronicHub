@@ -31,6 +31,33 @@ function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, 
     });
 }
 
+let sortKey = "";          
+let sortDir = 1;           
+const filters = { min: null, max: null };
+
+
+function passPriceFilter(p) {
+  const price = parseFloat(p?.Price);
+  if (!Number.isFinite(price)) return false;
+  if (filters.min != null && Number.isFinite(filters.min) && price < filters.min) return false;
+  if (filters.max != null && Number.isFinite(filters.max) && price > filters.max) return false;
+  return true;
+}
+
+
+function compareBy(p1, p2, key, dir) {
+  if (!key) return 0;
+  if (key === "Price" || key === "qty" || key === "Discount") {
+    const n1 = parseFloat(p1?.[key]) || 0;
+    const n2 = parseFloat(p2?.[key]) || 0;
+    return (n1 - n2) * dir;
+  }
+  const s1 = (p1?.[key] || "").toString().toLowerCase();
+  const s2 = (p2?.[key] || "").toString().toLowerCase();
+  return s1.localeCompare(s2) * dir;
+}
+
+
 export async function getAllProducts() {
   try {
     const dbRef = ref(db);
@@ -111,15 +138,14 @@ function filterProductsObject(allProducts) {
 
 }
 async function getProducts() {
-  const all = await getAllProducts();
-  const products = filterProductsObject(all);
-  const container = document.getElementsByClassName("ShowProduct")[0];
-  if (!container) return;
-  container.innerHTML = "";
-
-  for (let id in products) {
-    if (products.hasOwnProperty(id)) {
-      const product = products[id];
+     const all = await getAllProducts();                 
+     const base = filterProductsObject(all) || {};
+      let entries = Object.entries(base).filter(([_, p]) => passPriceFilter(p));
+      if (sortKey) entries.sort((a, b) => compareBy(a[1], b[1], sortKey, sortDir));
+      const container = document.getElementsByClassName("ShowProduct")[0];
+      if (!container) return;
+      container.innerHTML = "";
+      for (const [id, product] of entries) {
 
       const card = document.createElement("div");
       card.classList.add("ShowProduct-card");
@@ -180,14 +206,14 @@ async function getProducts() {
         }
       });
     }
-  }
+      window.dispatchEvent(new Event("products:rendered"));
+    
+  
 }
 
 
-
-
 /*******************************Searchbar*********************************************************/
-const search = document.querySelector(".search-bar-form input[type='text']");
+const search = document.getElementById("search-input")
 const cards = document.getElementsByClassName("ShowProduct-card");
 if (search) {
   search.addEventListener("input", () => {
@@ -303,5 +329,39 @@ window.addEventListener("load", getProducts);
     }
   });
 
-  
+  window.addEventListener("products:rendered", rebuildAndRender);
 })();
+
+
+const minEl = document.getElementById("filter-min");
+const maxEl = document.getElementById("filter-max");
+const sortSel = document.getElementById("sort-key");  
+const sortDirBtn = document.getElementById("sort-dir"); 
+
+if (minEl) {
+  minEl.addEventListener("input", () => {
+    const v = parseFloat(minEl.value);
+    filters.min = Number.isFinite(v) ? v : null;
+    getProducts();
+  });
+}
+if (maxEl) {
+  maxEl.addEventListener("input", () => {
+    const v = parseFloat(maxEl.value);
+    filters.max = Number.isFinite(v) ? v : null;
+    getProducts();
+  });
+}
+if (sortSel) {
+  sortSel.addEventListener("change", () => {
+    sortKey = sortSel.value;          
+    getProducts();
+  });
+}
+if (sortDirBtn) {
+  sortDirBtn.addEventListener("click", () => {
+    sortDir = -sortDir;                // toggle
+    sortDirBtn.textContent = sortDir === 1 ? "Asc" : "Desc";
+    getProducts();
+  });
+}
