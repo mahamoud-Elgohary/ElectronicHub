@@ -46,7 +46,7 @@ onAuthStateChanged(auth, (user) => {
         try {
           await signOut(auth);
           sessionStorage.removeItem("userId");
-          window.location.href = "/homePage/home.html";
+          window.location.href = "../homePage/home.html";
         } catch (err) {
           console.error("Sign out error:", err);
           alert("Logout failed: " + err.message);
@@ -60,7 +60,7 @@ onAuthStateChanged(auth, (user) => {
 
     if (profileA) {
       profileA.textContent = `Welcome ${name}`;
-      profileA.href = "./UserProfile.html"; 
+      profileA.href = "../homePage/UserProfile.html"; 
     }
 
     if (leftUl) {
@@ -89,7 +89,7 @@ onAuthStateChanged(auth, (user) => {
   const setLoggedOutUI = () => {
     if (profileA) {
       profileA.textContent = "Login";
-      profileA.href = "/auth/login.html";
+      profileA.href = "../auth/login.html";
     }
 
     if (leftUl) {

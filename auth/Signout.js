@@ -9,7 +9,7 @@ form.addEventListener("submit", async (e) => {
 
   try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    alert("✅ Account created for: " + userCredential.user.email);
+    alert(" Account created for: " + userCredential.user.email);
     form.reset();
     window.location.href = "./login.html"; 
   } catch (error) {

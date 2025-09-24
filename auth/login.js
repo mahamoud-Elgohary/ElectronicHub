@@ -8,7 +8,6 @@
   const googleBtn = document.getElementById("google-login");
 
 
-
   googleBtn.addEventListener("click", async () => {
     try {
       const result = await signInWithPopup(auth, provider);
@@ -41,10 +40,10 @@
       form.reset();
 
       if (user.email.endsWith("@electronichub.com")) {
-        window.location.href = "/homePage/AdminPanel.html";
+        window.location.href = "../homePage/AdminPanel.html";
 
       } else {
-        window.location.href = "/homePage/home.html";
+        window.location.href = "../homePage/home.html";
       }
 
     } catch (error) {
