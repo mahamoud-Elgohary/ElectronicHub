@@ -139,14 +139,13 @@ function filterProductsObject(allProducts) {
   }
 
   return result;
-
-}async function getProducts() {
+}
+async function getProducts() {
   const all = await getAllProducts();                 
-  const filtered = filterProductsArray(all); // now an array
-  const entries = filtered.filter(p => passPriceFilter(p));
+  const filtered = filterProductsArray(all);         
+  let entries = filtered.filter(p => passPriceFilter(p));
 
   if (sortKey) {
-    const isNum = sortKey === "Price" || sortKey === "qty" || sortKey === "Discount";
     entries.sort((a, b) => compareBy(a, b, sortKey, sortDir));
   }
 
@@ -155,7 +154,9 @@ function filterProductsObject(allProducts) {
   container.innerHTML = "";
 
   for (const product of entries) {
-    const id = product.id; // use the real Firebase ID
+    const id = product.id;                            // Firebase ID الحقيقي
+    const stock = parseInt(product.qty, 10) || 0;
+
     const card = document.createElement("div");
     card.classList.add("ShowProduct-card");
 
@@ -165,22 +166,65 @@ function filterProductsObject(allProducts) {
         <h4 class="mt-2">${product.ProductName}</h4>
         <p>Description: ${product.Description || ""}</p>
         <p class="price">$${product.Price}</p>
-        <div class="btns d-flex align-items-center gap-2">
-          <button class="btn btn-success btn1" aria-label="Add one">+</button>
-          <span class="qty" aria-live="polite">0</span>
-          <button class="btn btn-danger btn2" aria-label="Remove one">-</button>
-        </div>
+        <p class="text-muted small">Stock: ${stock}</p>
       </a>
+      <div class="btns d-flex align-items-center gap-2">
+        <button class="btn btn-success btn1" aria-label="Add one">+</button>
+        <span class="qty" aria-live="polite">0</span>
+        <button class="btn btn-danger btn2" aria-label="Remove one">-</button>
+      </div>
     `;
 
-    // ... add cart button logic as before
+    const btn1 = card.querySelector(".btn1");
+    const btn2 = card.querySelector(".btn2");
+    const qtySpan = card.querySelector(".qty");
+
+    function getCartQty(productId) {
+      const cart = JSON.parse(localStorage.getItem("cart") || "{}");
+      const it = cart[productId];
+      return it && Number.isFinite(it.quantity) ? it.quantity : 0;
+    }
+    function syncQtyUI(productId) {
+      qtySpan.textContent = getCartQty(productId);
+    }
+
+    syncQtyUI(id);
+
+    btn1.addEventListener("click", () => {
+      if (stock < 1) { flash("This product is out of stock!", "warning"); return; }
+      const current = getCartQty(id);
+      if (current >= stock) { flash("You reached the stock limit for this product.", "info"); return; }
+
+      addtocart({
+        id,
+        name: product.ProductName,
+        imageUrl: product.imageUrl,
+        price: parseFloat(product.Price),
+        quantity: 1,
+        stock
+      });
+
+      syncQtyUI(id);
+      updateCartSummaryUI();
+      flash("Added 1 to cart.", "success");
+    });
+
+    btn2.addEventListener("click", () => {
+      const current = getCartQty(id);
+      if (current <= 0) return;
+
+      decrease(id);
+      syncQtyUI(id);
+      updateCartSummaryUI();
+      if (typeof display === "function") display();
+      flash("Removed 1 from cart.", "secondary");
+    });
 
     container.appendChild(card);
   }
 
   window.dispatchEvent(new Event("products:rendered"));
 }
-
 
 
 /*******************************Searchbar*********************************************************/
@@ -331,8 +375,77 @@ if (sortSel) {
 }
 if (sortDirBtn) {
   sortDirBtn.addEventListener("click", () => {
-    sortDir = -sortDir;                // toggle
+    sortDir = -sortDir;                
     sortDirBtn.textContent = sortDir === 1 ? "Asc" : "Desc";
     getProducts();
   });
 }
+
+function flash(message, type = "danger") {
+  const box = document.getElementById("msg-box");
+  if (!box) return;
+
+  const alert = document.createElement("div");
+  alert.className = `alert alert-${type} alert-dismissible fade show`;
+  alert.role = "alert";
+  alert.innerHTML = `
+    ${message}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  `;
+  box.appendChild(alert);
+
+  setTimeout(() => alert.remove(), 3000);
+}
+
+if (minEl) {
+  minEl.addEventListener("input", () => {
+    const minVal = parseFloat(minEl.value);
+    const maxVal = parseFloat(maxEl.value);
+
+    if (Number.isFinite(minVal) && minVal < 0) {
+      minEl.setCustomValidity("Min must be 0 or more");
+      minEl.reportValidity();
+      return;
+    } else {
+      minEl.setCustomValidity("");
+    }
+
+    if (Number.isFinite(minVal) && Number.isFinite(maxVal) && minVal > maxVal) {
+      maxEl.setCustomValidity("Max must be greater than or equal to Min");
+      maxEl.reportValidity();
+      return;
+    } else {
+      maxEl.setCustomValidity("");
+    }
+
+    filters.min = Number.isFinite(minVal) ? minVal : null;
+    getProducts();
+  });
+}
+
+if (maxEl) {
+  maxEl.addEventListener("input", () => {
+    const minVal = parseFloat(minEl.value);
+    const maxVal = parseFloat(maxEl.value);
+
+    if (Number.isFinite(maxVal) && maxVal < 0) {
+      maxEl.setCustomValidity("Max must be 0 or more");
+      maxEl.reportValidity();
+      return;
+    } else {
+      maxEl.setCustomValidity("");
+    }
+
+    if (Number.isFinite(minVal) && Number.isFinite(maxVal) && minVal > maxVal) {
+      maxEl.setCustomValidity("Max must be greater than or equal to Min");
+      maxEl.reportValidity();
+      return;
+    } else {
+      maxEl.setCustomValidity("");
+    }
+
+    filters.max = Number.isFinite(maxVal) ? maxVal : null;
+    getProducts();
+  });
+}
+// ───────────────────────────────────────────────
