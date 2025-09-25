@@ -1,4 +1,4 @@
-import {auth,createUserWithEmailAndPassword} from "../config.js"
+import {auth,createUserWithEmailAndPassword,sendEmailVerification,ref,set,db} from "../config.js"
 const form = document.getElementById("signup-form");
 
 form.addEventListener("submit", async (e) => {
@@ -9,6 +9,16 @@ form.addEventListener("submit", async (e) => {
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+    await sendEmailVerification(user);
+
+    await set(ref(db, "users/" + user.uid), {
+      email,
+      role: "user",
+      verified_at: null,
+      created_at: Date.now()
+    });
         alert("✅ Account created for: " + userCredential.user.email);
         form.reset();
         window.location.href = "./login.html";

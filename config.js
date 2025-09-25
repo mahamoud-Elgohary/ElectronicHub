@@ -8,10 +8,10 @@ import {
   GoogleAuthProvider,
   signInWithEmailAndPassword,
   signInWithPopup,
-  signOut, createUserWithEmailAndPassword
+  signOut, createUserWithEmailAndPassword,sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
-  getDatabase, ref,get
+  getDatabase, ref,get,set,update
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 
@@ -136,7 +136,7 @@ export {
   auth,
   db, GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup, signOut, createUserWithEmailAndPassword, onAuthStateChanged,ref,get
+  signInWithPopup, signOut, createUserWithEmailAndPassword, onAuthStateChanged,sendEmailVerification,ref,get,set,update
 };
 
 

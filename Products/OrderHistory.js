@@ -11,10 +11,16 @@ function clearCart() {
   localStorage.removeItem("cart");
 }
 
-async function saveOrderSnapshot() {
+export async function saveOrderSnapshot() {
   const user = auth.currentUser;
   if (!user) {
     alert("You must be logged in to place an order.");
+    return;
+  }
+
+  // Check if the user's email is verified
+  if (!user.emailVerified) {
+    alert("Please verify your email before making a purchase.");
     return;
   }
 
@@ -52,9 +58,21 @@ async function saveOrderSnapshot() {
   await set(ref(db, `Orders/${user.uid}/${orderId}`), orderData);
 
   clearCart();
-  alert("Paid Succesfully");
+  alert("Paid Successfully");
   window.location.href = "./OrderHistory.html";
 }
+onAuthStateChanged(auth, (user) => {
+  const checkoutBtn = document.getElementById("checkout-btn");
+  if (user && checkoutBtn) {
+    if (!user.emailVerified) {
+      checkoutBtn.disabled = true;
+      checkoutBtn.innerHTML = "Please Verify Your Email First"; // You can change the button text to something like this
+    } else {
+      checkoutBtn.disabled = false;
+      checkoutBtn.innerHTML = "Pay Now"; // Reset the button text when email is verified
+    }
+  }
+});
 
 async function loadOrders(userId) {
   const dbRef = ref(db);
