@@ -59,19 +59,16 @@ function compareBy(p1, p2, key, dir) {
 
 
 export async function getAllProducts() {
-  try {
-    const dbRef = ref(db);
-    const item = await get(child(dbRef, "Products"));
-    if (item.exists()) {
-      return item.val();
-    } else {
-      console.log("No products found");
-      return null;
-    }
+try {
+    const snap = await get(ref(db, "Products"));
+    if (!snap.exists()) return [];
+    const obj = snap.val();
+    return Object.entries(obj).map(([id, value]) => ({ id, ...value }));
   } catch (error) {
-    console.error("Error reading data:", error);
-    return null;
+    console.error("Error reading products:", error);
+    return [];
   }
+
 }
 
 /********************************************Write data***************************************************************************/

@@ -1,4 +1,4 @@
-  import {auth,GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "../config.js"
+  import {auth,GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, ref ,get,db } from "../config.js"
 
 
   const provider = new GoogleAuthProvider();
@@ -16,11 +16,15 @@
       alert("Welcome " + user.displayName);
 
       // redirect same as email login
-      if (user.email.endsWith("@electronichub.com")) {
-        window.location.href = "../homePage/AdminPanel.html";
-      } else {
-        window.location.href = "../homePage/home.html";
-      }
+       const snap = await get(ref(db, "users/" + user.uid));
+const role = snap.exists() ? snap.val().role : "user";
+
+if (role === "admin") {
+  window.location.href = "../homePage/AdminPanel.html";
+} else {
+  window.location.href = "../homePage/home.html";
+}
+
     } catch (error) {
       alert("Google login failed: " + error.message);
     }
@@ -39,12 +43,14 @@
       alert(" Welcome back " + user.email);
       form.reset();
 
-      if (user.email.endsWith("@electronichub.com")) {
-        window.location.href = "../homePage/AdminPanel.html";
+     const snap = await get(ref(db, "users/" + user.uid));
+const role = snap.exists() ? snap.val().role : "user";
 
-      } else {
-        window.location.href = "../homePage/home.html";
-      }
+if (role === "admin") {
+  window.location.href = "../homePage/AdminPanel.html";
+} else {
+  window.location.href = "../homePage/home.html";
+}
 
     } catch (error) {
       window.alert("Login failed: " + error.message);

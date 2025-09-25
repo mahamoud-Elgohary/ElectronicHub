@@ -11,7 +11,7 @@ import {
   signOut, createUserWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
-  getDatabase
+  getDatabase, ref,get
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 
@@ -136,7 +136,7 @@ export {
   auth,
   db, GoogleAuthProvider,
   signInWithEmailAndPassword,
-  signInWithPopup, signOut, createUserWithEmailAndPassword, onAuthStateChanged
+  signInWithPopup, signOut, createUserWithEmailAndPassword, onAuthStateChanged,ref,get
 };
 
 

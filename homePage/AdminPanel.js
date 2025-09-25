@@ -1,4 +1,4 @@
-import { auth, db } from "../config.js";
+import { auth, db ,signOut} from "../config.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
   child,
@@ -65,23 +65,44 @@ function initAdminPanel() {
     max: null
   };
 
+  function renderAdminNavbar() {
+  const nav = document.querySelector("nav .top-nav .left-side ul");
+  if (!nav) return;
+  nav.innerHTML = `
+    <li><a href="./AdminPanel.html">Admin Dashboard</a><span>|</span></li>
+    <li><a href="./admin-support.html">Technical Support</a></li>
+  `;
+
+  const rightNav = document.querySelector("nav .top-nav .right-side ul");
+  if (rightNav) {
+    rightNav.innerHTML = `
+      <li><a href="../auth/login.html">Logout</a></li>
+    `;
+  }
+}
   function newId() {
     return Date.now().toString();
   }
 
-  async function fetchAllProducts() {
-    const fetchId = await get(child(ref(db), "Products"));
-    if (!fetchId.exists()) return [];
-    const obj = fetchId.val();
-    const list = [];
-    for (const id in obj) {
-      list.push({
-        id,
-        ...obj[id]
-      });
+  async function fetchAllProducts() {    
+  try {
+    const snap = await get(ref(db, "Products"));
+    if (!snap.exists()) {
+      console.warn("No products found in Firebase (Products node).");
+      return [];
     }
+    const obj = snap.val();
+    console.log("✅ Raw Firebase Products node:", obj);
+
+    const list = Object.entries(obj).map(([id, value]) => ({ id, ...value }));
+    console.log("✅ Processed product list:", list);
     return list;
+  } catch (err) {
+    console.error("🔥 Error fetching products:", err);
+    return [];
   }
+}
+
 
   function renderTable(list) {
     const html = list.map((element) => {
@@ -115,61 +136,82 @@ function initAdminPanel() {
   }
 
   function applySearch() {
-    const term = (searchInput && searchInput.value ? searchInput.value : "")
-      .toLowerCase()
-      .trim();
+  const term = (searchInput?.value || "").toLowerCase().trim();
 
-    shownProducts = allProducts.filter(pro => {
-      const name = (pro.ProductName || "").toLowerCase();
-      const cat = (pro.Categoryname || "").toLowerCase();
-      const price = Number(pro.Price) || 0;
+  shownProducts = allProducts.filter(pro => {
+    const name = (pro.ProductName || "").toLowerCase();
+    const cat = (pro.Categoryname || "").toLowerCase();
+    const price = Number(pro.Price) || 0;
 
-      if (filters.category && (pro.Categoryname || "") !== filters.category) return false;
-      if (filters.min != null && price < filters.min) return false;
-      if (filters.max != null && price > filters.max) return false;
+    // Apply search term
+    const matchesTerm = !term || name.includes(term) || cat.includes(term);
 
-      if (term && !(name.includes(term) || cat.includes(term))) return false;
-      return true;
+    // Apply category filter
+    const matchesCategory = !filters.category || cat === filters.category.toLowerCase();
+
+    // Apply min/max price filter
+    const matchesMin = filters.min == null || price >= filters.min;
+    const matchesMax = filters.max == null || price <= filters.max;
+
+    return matchesTerm && matchesCategory && matchesMin && matchesMax;
+  });
+
+  // Apply sorting
+  if (sortKey) {
+    const key = sortKey;
+    const isText = key === "ProductName" || key === "Categoryname";
+    shownProducts.sort((a, b) => {
+      const va = isText ? (a[key] || "").toLowerCase() : Number(a[key]) || 0;
+      const vb = isText ? (b[key] || "").toLowerCase() : Number(b[key]) || 0;
+      if (va < vb) return -1 * sortDir;
+      if (va > vb) return 1 * sortDir;
+      return 0;
     });
-
-    if (sortKey) {
-      const key = sortKey;
-      const isText = (key === "ProductName" || key === "Categoryname");
-      shownProducts.sort((a, b) => {
-        const va = isText ? (a[key] || "").toString().toLowerCase() : (Number(a[key]) || 0);
-        const vb = isText ? (b[key] || "").toString().toLowerCase() : (Number(b[key]) || 0);
-        if (va < vb) return -1 * sortDir;
-        if (va > vb) return 1 * sortDir;
-        return 0;
-      });
-    }
-
-    currentPage = 1;
-    renderPage();
   }
+
+  currentPage = 1;
+  renderPage();
+}
 
   function renderPage() {
     const start = (currentPage - 1) * PAGE_SIZE;
     const slice = shownProducts.slice(start, start + PAGE_SIZE);
     renderTable(slice);
     const totalPages = Math.max(1, Math.ceil(shownProducts.length / PAGE_SIZE));
-    pageInfo.textContent = `
-  Page ${currentPage} / ${totalPages} • ${shownProducts.length} items`;
+ pageInfo.textContent = `Page ${currentPage} / ${totalPages} • ${shownProducts.length} items`;
     prevPageBtn.disabled = currentPage <= 1;
     nextPageBtn.disabled = currentPage >= totalPages;
   }
 
   async function loadProducts() {
+      console.log("⚡ loadProducts() started");
+  try {
     allProducts = await fetchAllProducts();
 
+    // build categories safely
+    let cats = [];
     if (filterCategory) {
-      const cats = Array.from(new Set(allProducts.map(p => p.Categoryname).filter(Boolean))).sort();
-      filterCategory.innerHTML = `<option value="">All categories</option>` +
+      cats = Array.from(
+        new Set(allProducts.map(p => (p.Categoryname || "").trim()).filter(Boolean))
+      ).sort((a, b) => a.localeCompare(b));
+
+      filterCategory.innerHTML =
+        `<option value="">All categories</option>` +
         cats.map(c => `<option value="${c}">${c}</option>`).join("");
+
+      console.log("📂 Categories found:", cats);
+    } else {
+      console.log("📂 filterCategory element not found in DOM");
     }
 
     applySearch();
+  } catch (err) {
+    console.error("Failed to load products:", err);
+    tbody.innerHTML = `<tr><td colspan="9">Error loading products (see console)</td></tr>`;
   }
+  
+}
+
 
   function showModal(title, modalElement = productModal) {
     if (!openCloseModel) openCloseModel = new bootstrap.Modal(modalElement);
@@ -358,10 +400,10 @@ function initAdminPanel() {
     renderPage();
   });
 
-  window.addEventListener("load", async function () {
-    await loadProducts();
+  //window.addEventListener("load", async function () {
+     loadProducts();
     applySearch();
-  });
+  //});
   if (goBtn && gotoPageInput) {
     const goHandler = () => {
       const totalPages = Math.max(1, Math.ceil(shownProducts.length / PAGE_SIZE));
@@ -513,4 +555,6 @@ function initAdminPanel() {
   }
 
   window.admin_loadUsers = loadUsers;
+renderAdminNavbar();
 }
+console.log("Firebase objects:", { auth, db });
