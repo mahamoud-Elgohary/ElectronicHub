@@ -2,6 +2,36 @@ import { auth, ref, get, db } from '../config.js';
 import { getAllProducts } from './Products.js';
 import { saveOrderSnapshot } from './OrderHistory.js'; 
 
+
+function showMessage(message, type = "info") {
+  const container = document.getElementById("notification-container");
+  if (!container) return;
+
+  let bg = "bg-primary";
+  if (type === "success") bg = "bg-success";
+  if (type === "warning") bg = "bg-warning text-dark";
+  if (type === "error") bg = "bg-danger";
+
+  const toast = document.createElement("div");
+  toast.className = `toast align-items-center text-white ${bg} border-0 show mb-2`;
+  toast.role = "alert";
+  toast.innerHTML = `
+    <div class="d-flex">
+      <div class="toast-body">${message}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  `;
+
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+    toast.classList.add("hide");
+    setTimeout(() => toast.remove(), 500);
+  }, 3000);
+}
+
+
 let cart = JSON.parse(localStorage.getItem("cart")) || {};
 
 function loadData() {
@@ -28,26 +58,21 @@ export async function getNamesAndPrices() {
 // Add to cart
 export function addtocart(product) {
   const exs = cart[product.id];
+  // Update in cart only 
+
   if (exs) {
-    if (exs.quantity + (product.quantity || 1) > product.stock) {
-      alert("Not enough stock available!");
-      return;
-    }
-    exs.quantity += product.quantity || 1;
-  } else {
-    if (product.stock < 1) {
-      alert("This product is out of stock!");
-      return;
-    }
-    cart[product.id] = {
-      id: product.id,
-      name: product.name,
-      imageUrl: product.imageUrl,
-      price: product.price,
-      quantity: product.quantity || 1,
-      stock: product.stock
-    };
-  }
+  exs.quantity += product.quantity || 1;
+} else {
+  cart[product.id] = {
+    id: product.id,
+    name: product.name,
+    imageUrl: product.imageUrl,
+    price: product.price,
+    quantity: product.quantity || 1,
+    stock: product.stock
+  };
+}
+
   saveData();
   window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "add", productId: product.id } }));
 }
@@ -65,7 +90,7 @@ function getTotal() {
 }
 
 export function increase(productId) {
-  if (cart[productId] && cart[productId].quantity + 1 <= cart[productId].stock) {
+  if (cart[productId]) {
     cart[productId].quantity++;
     saveData();
     window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "inc", productId } }));
@@ -170,9 +195,9 @@ export async function checkout() {
   const { totalPrice, totalQty } = getAll();
 
   if (totalQty === 0) {
-    alert("Cart is empty!");
-    return;
-  }
+  showMessage("Cart is empty!", "warning"); 
+  return;
+}
 
   const user = auth.currentUser;
   if (!user) {
@@ -184,6 +209,19 @@ export async function checkout() {
   if (!verified) {
     alert("You must verify your email before proceeding to payment!");
     return; 
+  }
+
+  const allProducts = await getAllProducts();
+  for (let item of Object.values(cart)) {
+    const dbProduct = allProducts.find(p => p.id === item.id);
+    if (!dbProduct) {
+      alert(`Product ${item.name} no longer exists.`);
+      return;
+    }
+    if (dbProduct.qty < item.quantity) {
+      alert(`Not enough stock for ${item.name}. Available: ${dbProduct.qty}`);
+      return;
+    }
   }
 
   console.log("Proceeding to checkout...");
