@@ -154,7 +154,7 @@ async function getProducts() {
   container.innerHTML = "";
 
   for (const product of entries) {
-    const id = product.id;                            // Firebase ID الحقيقي
+    const id = product.id;                         
     const stock = parseInt(product.qty, 10) || 0;
 
     const card = document.createElement("div");
