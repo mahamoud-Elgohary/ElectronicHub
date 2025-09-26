@@ -1,12 +1,11 @@
-import { auth, ref, get, db } from '../config.js';
+import { auth, ref, update, get, db } from '../config.js';
 import { getAllProducts } from './Products.js';
-import { saveOrderSnapshot } from './OrderHistory.js'; 
+import { saveOrderSnapshot } from './OrderHistory.js';
 
 
 function showMessage(message, type = "info") {
   const container = document.getElementById("notification-container");
   if (!container) return;
-
   let bg = "bg-primary";
   if (type === "success") bg = "bg-success";
   if (type === "warning") bg = "bg-warning text-dark";
@@ -61,17 +60,17 @@ export function addtocart(product) {
   // Update in cart only 
 
   if (exs) {
-  exs.quantity += product.quantity || 1;
-} else {
-  cart[product.id] = {
-    id: product.id,
-    name: product.name,
-    imageUrl: product.imageUrl,
-    price: product.price,
-    quantity: product.quantity || 1,
-    stock: product.stock
-  };
-}
+    exs.quantity += product.quantity || 1;
+  } else {
+    cart[product.id] = {
+      id: product.id,
+      name: product.name,
+      imageUrl: product.imageUrl,
+      price: product.price,
+      quantity: product.quantity || 1,
+      stock: product.stock
+    };
+  }
 
   saveData();
   window.dispatchEvent(new CustomEvent("cart:updated", { detail: { type: "add", productId: product.id } }));
@@ -161,7 +160,7 @@ export function updateNavbarCart() {
   const navCart = document.querySelector(".cart");
   const { totalPrice } = getAll();
   navCart.innerHTML = `<a href="./cart.html"><i class="fa-solid fa-cart-shopping"></i></a> $${totalPrice.toFixed(2)}`;
-}async function isUserVerified() {
+} async function isUserVerified() {
   const user = auth.currentUser;
   if (!user) {
     console.log("No user is logged in");
@@ -195,65 +194,83 @@ export async function checkout() {
   const { totalPrice, totalQty } = getAll();
 
   if (totalQty === 0) {
-  showMessage("Cart is empty!", "warning"); 
-  return;
-}
+    showMessage("Cart is empty!", "warning");
+    return;
+  }
 
   const user = auth.currentUser;
   if (!user) {
-    alert("You must be logged in to checkout!");
+    showMessage("You must be logged in to checkout!");
     return;
   }
 
   const verified = await isUserVerified();
   if (!verified) {
-    alert("You must verify your email before proceeding to payment!");
-    return; 
+    showMessage("You must verify your email before proceeding to payment!");
+    return;
   }
 
   const allProducts = await getAllProducts();
+
   for (let item of Object.values(cart)) {
     const dbProduct = allProducts.find(p => p.id === item.id);
     if (!dbProduct) {
-      alert(`Product ${item.name} no longer exists.`);
+      showMessage(`Product ${item.name} no longer exists.`);
       return;
     }
-    if (dbProduct.qty < item.quantity) {
-      alert(`Not enough stock for ${item.name}. Available: ${dbProduct.qty}`);
+
+    const currentStock = parseInt(dbProduct.qty);
+    const orderedQty = item.quantity;
+
+    if (currentStock < orderedQty) {
+      showMessage(`Not enough stock for ${item.name}. Available: ${currentStock}`);
       return;
     }
   }
-
+  // Open Stripe
   console.log("Proceeding to checkout...");
-const stripeBaseUrl = "https://buy.stripe.com/test_28E28q3XjeV230dbWgfMA00";
+  const stripeBaseUrl = "https://buy.stripe.com/test_28E28q3XjeV230dbWgfMA00";
   const url = `${stripeBaseUrl}?amount=${totalPrice.toFixed(2)}&items=${totalQty}`;
   window.open(url, "_blank");
 
-  await saveOrderSnapshot();
-
-  cart = {};
-  saveData();
-  display();
-  updateNavbarCart();
-
+  //  update  stock in Firebase
   
-  window.location.href = "orderhistory.html";
-}
-window.addEventListener("cart:updated", () => {
-  updateNavbarCart();
-});
 
-document.addEventListener("DOMContentLoaded", () => {
-  loadData();
-  display();
-  updateNavbarCart();
-});
+  // await saveOrderSnapshot();
+  const updates = {};
+  for (let item of Object.values(cart)) {
+    const dbProductRef = ref(db, `Products/${item.id}`);
+    const dbProduct = await get(dbProductRef);
+
+    if (dbProduct.exists()) {
+      const updatedStock = dbProduct.val().qty - item.quantity;
+      updates[`Products/${item.id}/qty`] = updatedStock; // Update stock
+    }
+  }
+
+  try {
+    await update(ref(db), updates);  // Apply stock updates to DB
+    console.log("Product stock updated successfully!");
+
+    // Step 4: Clear the cart and update UI
+    cart = {};  // Clear cart after successful checkout
+    saveData();  // Save empty cart to localStorage
+    display();   // Re-render cart page
+    updateNavbarCart(); // Update the cart in the navbar
+
+    window.location.href = "orderhistory.html";  // Redirect to Order History
+  } catch (error) {
+    console.error("Error updating product stock:", error);
+    alert("Error updating stock. Please try again.");
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const checkoutBtn = document.getElementById("checkout-btn");
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", async (e) => {
       e.preventDefault();
-      await checkout(); 
+      await checkout();
     });
   }
 });
