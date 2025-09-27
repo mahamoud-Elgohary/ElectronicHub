@@ -1,0 +1,56 @@
+.container h1 {
+    padding: 20px 0;
+}
+
+
+
+.container form {
+    background-color: #0d0724;
+    padding: 30px;
+    border-radius: 30px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container form button {
+    background-color: #e74c3c;
+    padding: 3px 20px;
+    border-radius: 15px;
+    border: none;
+    color: white;
+}
+
+.container form label {
+    color: white;
+}
+
+.container input {
+    border-radius: 10px;
+    border: none;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+img {
+    object-fit: cover;
+}
+
+@media (max-width: 992px) {
+
+.container form{
+display: flex;
+flex-direction: column;
+}
+.container form label{
+    margin-bottom: 10px;
+}
+.container form input{
+    margin-bottom: 10px;
+}
+.container form button{
+    margin-top: 10px;
+}
+}

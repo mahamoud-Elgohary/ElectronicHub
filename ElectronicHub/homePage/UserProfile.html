@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Profile Update</title>
+  <!-- Favicon Browser -->
+  <link rel="icon" type="image/png" href="../favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+
+  <div class="w-full max-w-md p-8 bg-white rounded-2xl shadow-xl">
+    <h1 class="text-2xl font-bold text-center mb-6">Update Profile</h1>
+
+    <form id="profileForm" class="space-y-4">
+      <div>
+        <label for="displayName" class="block text-sm font-medium mb-1">Name</label>
+        <input id="displayName" type="text" placeholder="Enter your name" class="w-full px-3 py-2 border rounded-lg" />
+      </div>
+
+      <div>
+        <label for="currentEmail" class="block text-sm font-medium mb-1">Current Email</label>
+        <input id="currentEmail" type="email" disabled class="w-full px-3 py-2 border rounded-lg bg-gray-100" />
+      </div>
+
+      <div>
+        <label for="currentPassword" class="block text-sm font-medium mb-1">Current Password</label>
+        <input id="currentPassword" type="password" required class="w-full px-3 py-2 border rounded-lg" />
+      </div>
+
+      <div>
+        <label for="newEmail" class="block text-sm font-medium mb-1">New Email (optional)</label>
+        <input id="newEmail" type="email" placeholder="Enter new email" class="w-full px-3 py-2 border rounded-lg" />
+      </div>
+
+      <div>
+        <label for="newPassword" class="block text-sm font-medium mb-1">New Password (optional)</label>
+        <input id="newPassword" type="password" placeholder="Enter new password"
+          class="w-full px-3 py-2 border rounded-lg" />
+      </div>
+
+      <button id="updateBtn" type="submit"
+        class="w-full py-2.5 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+        Update
+      </button>
+    </form>
+
+    <div id="msg" class="mt-4 text-center text-sm hidden"></div>
+
+    <button id="backHomeBtn"
+      class="hidden w-full mt-3 py-2.5 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition">
+      Back to Home
+    </button>
+  </div>
+
+  <script type="module" src="UserProfile.js"></script>
+</body>
+
+</html>

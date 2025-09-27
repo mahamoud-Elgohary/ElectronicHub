@@ -1,12 +1,19 @@
 // Import Firebase
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
-  getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithEmailAndPassword,
-  signInWithPopup, signOut, createUserWithEmailAndPassword, sendEmailVerification
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import {
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut, createUserWithEmailAndPassword,sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
-  getDatabase, ref, get, set, update, child, runTransaction ,push
+  getDatabase, ref,get,set,update
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
 
 
 // Your Firebase config
@@ -126,9 +133,10 @@ onAuthStateChanged(auth, (user) => {
 });
 
 export {
-  auth, db, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, signOut,
-  createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification,
-  ref, get, set, update, child, runTransaction, push
+  auth,
+  db, GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup, signOut, createUserWithEmailAndPassword, onAuthStateChanged,sendEmailVerification,ref,get,set,update
 };
 
 

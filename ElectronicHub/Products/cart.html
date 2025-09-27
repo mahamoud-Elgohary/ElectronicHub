@@ -67,21 +67,42 @@
       <b> Pay Now</b>
     </button>
   </div>
-
+  
   <!-- Message  -->
-  <div id="notification-container" class="position-fixed top-0 end-0 p-3" style="z-index: 2000;">
+  <div id="notification-container" 
+       class="position-fixed top-0 end-0 p-3" 
+       style="z-index: 2000;">
   </div>
 
   <script type="module">
     import { display, updateNavbarCart, checkout } from "./cart.js";
     display();
     updateNavbarCart?.();
-    document.getElementById("checkout-btn")?.addEventListener("click", checkout);
+
     window.addEventListener("storage", (e) => {
-      if (e.key === "cart") { display(); updateNavbarCart?.(); }
+      if (e.key === "cart") {
+        display();
+        updateNavbarCart?.();
+      }
+    });
+
+    ///////////////////////////Stripe test//////////////////////
+    // initial render
+    display();
+    updateNavbarCart?.();
+
+    // checkout click
+    document.getElementById("checkout-btn")
+      ?.addEventListener("click", checkout);
+
+    // keep in sync with localStorage
+    window.addEventListener("storage", (e) => {
+      if (e.key === "cart") {
+        display();
+        updateNavbarCart?.();
+      }
     });
   </script>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 

@@ -1,6 +1,7 @@
 
 
-import { db, ref, get, child,push } from "../config.js";
+import { child, get, ref } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { db } from "../config.js";              // config.js is one level up
 import { addtocart, decrease } from "./cart.js"; // cart.js is in the same folder
 
 const getParam = (name) => new URLSearchParams(location.search).get(name) || "";

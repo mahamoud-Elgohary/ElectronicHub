@@ -1,16 +1,27 @@
-import { db, ref, get, set,push } from "../config.js";
-import { addtocart, decrease } from "./cart.js";
+import {
+  child,
+  get,
+  ref,
+  set
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import {
+  db
+} from "../config.js";
+import {
+  addtocart,
+  decrease
+} from "./cart.js";
 
 function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, qty, Description) {
   set(ref(db, 'Products/' + ProductId), {
-    ProductName,
-    Price,
-    Cost,
-    Discount,
-    qty: Number(qty) || 0,  // ← ensure number
-    imageUrl,
-    Description
-  })
+      ProductName: ProductName,
+      Price: Price,
+      Cost: Cost,
+      Discount: Discount,
+      qty: qty,
+      imageUrl: imageUrl,
+      Description: Description
+    })
     .then(() => {
       alert('success');
     })
@@ -20,8 +31,8 @@ function writeUserData(ProductId, ProductName, imageUrl, Price, Cost, Discount, 
     });
 }
 
-let sortKey = "";
-let sortDir = 1;
+let sortKey = "";          
+let sortDir = 1;           
 const filters = { min: null, max: null };
 
 
@@ -87,7 +98,7 @@ function filterProductsArray(allProducts) {
 function getCategoryNameFromURL() {
   const p = new URLSearchParams(location.search);
   const name = p.get("card") || "";
-  // console.log(name)
+  console.log(name)
   return name
 }
 getCategoryNameFromURL()
@@ -105,23 +116,6 @@ function getCartTotalFromLS() {
 function updateCartSummaryUI() {
   const el = document.getElementById("cart-total");
   if (el) el.textContent = getCartTotalFromLS().toFixed(2);
-}
-
-function updateStockBadgeInCard(productId, newQty) {
-  const container = document.getElementsByClassName("ShowProduct")[0];
-  if (!container) return;
-  const cards = container.getElementsByClassName("ShowProduct-card");
-  for (const card of cards) {
-    const link = card.querySelector("a[href*='details.html?id=']");
-    if (!link) continue;
-    const url = new URL(link.getAttribute("href"), location.origin);
-    const id = url.searchParams.get("id");
-    if (id === productId) {
-      const p = card.querySelector(".text-muted.small");
-      if (p) p.textContent = `Stock: ${Number(newQty ?? 0)}`;
-      break;
-    }
-  }
 }
 
 function filterProductsObject(allProducts) {
@@ -147,8 +141,8 @@ function filterProductsObject(allProducts) {
   return result;
 }
 async function getProducts() {
-  const all = await getAllProducts();
-  const filtered = filterProductsArray(all);
+  const all = await getAllProducts();                 
+  const filtered = filterProductsArray(all);         
   let entries = filtered.filter(p => passPriceFilter(p));
 
   if (sortKey) {
@@ -160,7 +154,7 @@ async function getProducts() {
   container.innerHTML = "";
 
   for (const product of entries) {
-    const id = product.id;
+    const id = product.id;                         
     const stock = parseInt(product.qty, 10) || 0;
 
     const card = document.createElement("div");
@@ -353,16 +347,11 @@ window.addEventListener("load", getProducts);
   window.addEventListener("products:rendered", rebuildAndRender);
 })();
 
-// 🔔 Update visible stock badges after checkout reduces inventory
-window.addEventListener("products:qty-updated", (e) => {
-  const updated = e.detail || {};
-  Object.entries(updated).forEach(([id, qty]) => updateStockBadgeInCard(id, qty));
-});
 
 const minEl = document.getElementById("filter-min");
 const maxEl = document.getElementById("filter-max");
-const sortSel = document.getElementById("sort-key");
-const sortDirBtn = document.getElementById("sort-dir");
+const sortSel = document.getElementById("sort-key");  
+const sortDirBtn = document.getElementById("sort-dir"); 
 
 if (minEl) {
   minEl.addEventListener("input", () => {
@@ -380,13 +369,13 @@ if (maxEl) {
 }
 if (sortSel) {
   sortSel.addEventListener("change", () => {
-    sortKey = sortSel.value;
+    sortKey = sortSel.value;          
     getProducts();
   });
 }
 if (sortDirBtn) {
   sortDirBtn.addEventListener("click", () => {
-    sortDir = -sortDir;
+    sortDir = -sortDir;                
     sortDirBtn.textContent = sortDir === 1 ? "Asc" : "Desc";
     getProducts();
   });
