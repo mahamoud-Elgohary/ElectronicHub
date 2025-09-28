@@ -1,4 +1,4 @@
-import { auth, db, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, ref, get, set } from "../config.js";
+import { auth, db, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup, ref, get, set ,update} from "../config.js";
 
 const form = document.getElementById("login-form");
 const googleBtn = document.getElementById("google-login");
